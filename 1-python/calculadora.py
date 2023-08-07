@@ -204,7 +204,7 @@ result_stack = []
 
 for line in PROBLEMAS_FILE:
     # Guardar resultados
-    if line == "\n":  # TODO Final de archivo
+    if line == "\n":
         for index in range(len(line_stack)):
             sentence = line_stack[index].replace("\n", "")
             # Chequear si a habido algún error
@@ -253,6 +253,24 @@ for line in PROBLEMAS_FILE:
         continue
 
     result_stack.append(ans)
+
+# Guardar resultados de ultimo problema
+if len(line_stack) > 0:
+    for index in range(len(line_stack)):
+        sentence = line_stack[index].replace("\n", "")
+        # Chequear si a habido algún error
+        if "Error" in result_stack:  # Errores Detectados
+            if result_stack[index] == "Error":
+                DESARROLLOS_FILE.write(f"{sentence} = {result_stack[index]}\n")
+            else:
+                DESARROLLOS_FILE.write(f"{sentence} = Sin resolver\n")
+        else:  # Procedimiento Normal
+            DESARROLLOS_FILE.write(f"{sentence} = {result_stack[index]}\n")
+
+    # Resetear Calculadora
+    ans = 0
+    line_stack.clear()
+    result_stack.clear()
 
 PROBLEMAS_FILE.close()
 DESARROLLOS_FILE.close()
