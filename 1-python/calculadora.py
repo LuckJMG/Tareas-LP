@@ -2,50 +2,14 @@ import re
 
 
 # Funciones
-def sentence_check(sentence: str) -> bool:
-    """
-    ***
-    * sentence : str
-    ***
-    Chequea si la sentencia entregada corresponde a una sentencia valida
-    de la calculadora, devuelve True si es el caso y False si no.
-    """
-
-    # Descartar errores comunes
-    if sentence.count("(") != sentence.count(")"):  # Parentesis sin pares
-        return False
-
-    # Ver si la sentencia es sintacticamente correcta
-    check = re.match(SENTENCIA, sentence)
-    if check is not None:
-        return True
-    elif "(" not in sentence:
-        return False
-
-    # Determinar si sentencias en parentesis son correctas
-    operation = sentence
-    parenthesis = get_parenthesis(sentence)
-    while parenthesis != operation:
-        if not sentence_check(parenthesis):
-            return False
-        operation = operation.replace(f"({parenthesis})", "1")
-        parenthesis = get_parenthesis(operation)
-
-    if operation == "1\n":
-        return True
-
-    return sentence_check(operation)
-
-
 def get_parenthesis(sentence: str) -> str:
     """
     ***
     * sentence : str
-    * position : int
     ***
     De una sentencia, si es que posee parentesis, extrae la sentencia dentro de los
-    segun la posicion dada [(0)+(1)-(2)] y devuelve lo extraido, en caso de que no hayan parentesis
-    o no haya un parentesis en la posicion dada, devuelve la sentencia original.
+    parentesis y devuelve lo extraido, en caso de que no haya parentesis,
+    devuelve la sentencia original.
     """
 
     start = 0
@@ -140,27 +104,50 @@ def apply_cupon(sentence: str) -> str:
     return sentence.replace(f"CUPON({value})", str(result))
 
 
-def calculator(sentence: str) -> int:
+def calculator(sentence: str, ans: int) -> int:
     """
     ***
     * sentence : str
+    * ans : int
     ***
-    Función principal del programa, recibe una sentencia correcta y calcula
-    su resultado para luego devolverlo.
+    Función principal del programa, recibe una sentencia y el resultado
+    del calculo anterior, para luego calcular la solucion de la sentencia
+    dada y entregarla.
     """
 
     # Resolver parentesis primero
     problem: str = sentence
     while "(" in problem:
         subsentence: str = get_parenthesis(problem)
+        if subsentence == problem:
+            break
 
-        result: int = calculator(subsentence)
+        result: int = calculator(subsentence, ans)
         if result == -1:
             return result  # Abortar en caso de error
 
         problem = problem.replace(f"({subsentence})", str(result))
+        # Caso de que el reemplazo sea el resultado final
+        if re.fullmatch("[0-9]+", problem) is not None:
+            return result
 
-    # Calculo de operaciones segun prioridad y luego de izquierda a
+    # Chequeo de sintaxis valida
+    check = re.match(SENTENCIA, problem)
+    if check is None:
+        return -1
+
+    # Formatear problema
+    problem = problem.replace("ANS", f"{ans}")  # Reemplazar ANS por previo resultado
+    problem = problem.replace(" ", "")  # Eliminar espacios
+    problem = problem.replace("-", "+-")  # Dejar resta como suma de numeros negativos
+
+    # Aplicar cupones
+    while "CUPON" in problem:
+        problem = apply_cupon(problem)
+        if problem == "":
+            return -1
+
+    # Calculo de operaciones segun prioridad y luego de izquierda a derecha
     OPERATORS = ["*", "//", "+"]
     for operator in OPERATORS:
         while operator in problem:
@@ -200,14 +187,14 @@ SENTENCIA = rf"{OPERACION}({OPERADOR}({ENTERO}|{CLAVE}))*"
 PROBLEMAS_FILE = open("problemas.txt")
 DESARROLLOS_FILE = open("desarrollos.txt", "w")
 ans = 0
-line_stack = []
+sentence_stack = []
 result_stack = []
 
 for line in PROBLEMAS_FILE:
     # Guardar resultados
     if line == "\n":
-        for index in range(len(line_stack)):
-            sentence = line_stack[index].replace("\n", "")
+        for index in range(len(sentence_stack)):
+            sentence = sentence_stack[index]
             # Chequear si a habido algún error
             if "Error" in result_stack:  # Errores Detectados
                 if result_stack[index] == "Error":
@@ -220,35 +207,19 @@ for line in PROBLEMAS_FILE:
 
         # Resetear Calculadora
         ans = 0
-        line_stack.clear()
+        sentence_stack.clear()
         result_stack.clear()
         continue
 
-    line_stack.append(line)
-    # Chequear valides de las sentencias
-    if not sentence_check(line):
-        result_stack.append("Error")
-        continue
-
-    if "Error" in result_stack:
-        result_stack.append("")
-        continue
-
-    # Format sentence
-    sentence = line.replace("ANS", f"{ans}")  # Reemplazar ANS por previo resultado
-    sentence = sentence.replace("-", "+-")  # Dejar resta como suma de numeros negativos
-    sentence = sentence.replace(" ", "")  # Quitar espacios
-
-    # Aplicar cupones
-    while "CUPON" in sentence:
-        sentence = apply_cupon(sentence)
-
-    if sentence == "":  # Detección de errores en los cupones (y > 100)
+    sentence = line.replace("\n", "")
+    sentence_stack.append(sentence)
+    # Chequeo de paridad de los parentesis
+    if sentence.count("(") != sentence.count(")"):
         result_stack.append("Error")
         continue
 
     # Añadir resultados
-    ans = calculator(sentence)
+    ans = calculator(sentence, ans)
     if ans == -1:  # Detección de errores durante el calculo
         result_stack.append("Error")
         continue
@@ -256,9 +227,9 @@ for line in PROBLEMAS_FILE:
     result_stack.append(ans)
 
 # Guardar resultados de ultimo problema
-if len(line_stack) > 0:
-    for index in range(len(line_stack)):
-        sentence = line_stack[index].replace("\n", "")
+if len(sentence_stack) > 0:
+    for index in range(len(sentence_stack)):
+        sentence = sentence_stack[index].replace("\n", "")
         # Chequear si a habido algún error
         if "Error" in result_stack:  # Errores Detectados
             if result_stack[index] == "Error":
@@ -267,11 +238,6 @@ if len(line_stack) > 0:
                 DESARROLLOS_FILE.write(f"{sentence} = Sin resolver\n")
         else:  # Procedimiento Normal
             DESARROLLOS_FILE.write(f"{sentence} = {result_stack[index]}\n")
-
-    # Resetear Calculadora
-    ans = 0
-    line_stack.clear()
-    result_stack.clear()
 
 PROBLEMAS_FILE.close()
 DESARROLLOS_FILE.close()
