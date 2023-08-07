@@ -88,7 +88,7 @@ def get_numbers(sentence: str, operator: str) -> (int, int):
     de dos numeroa (izquierda, derecha).
     """
 
-    operation = re.search(rf"({ENTERO})\{operator}({ENTERO})", sentence).group(0)
+    operation = re.search(rf"\-?({ENTERO})\{operator}\-?({ENTERO})", sentence).group(0)
     nums = operation.split(operator)
 
     return (int(nums[0]), int(nums[1]))
@@ -160,9 +160,8 @@ def calculator(sentence: str) -> int:
         problem = problem.replace(f"({subsentence})", str(result))
 
     # Calculo de operaciones segun prioridad y luego de izquierda a
-    OPERATORS = ["*", "//", "-", "+"]
+    OPERATORS = ["*", "//", "+"]
     for operator in OPERATORS:
-        # TODO sumas y restas de izquierda a derecha
         while operator in problem:
             (left_num, right_num) = get_numbers(problem, operator)
 
@@ -174,12 +173,10 @@ def calculator(sentence: str) -> int:
                         return -1  # 0 division error
 
                     result = left_num // right_num
-                case "-":
-                    result = left_num - right_num
-                    if result < 0:
-                        result = 0
                 case "+":
                     result = left_num + right_num
+                    if result < 0:
+                        result = 0
                 case _:
                     result = -1  # Unknown operator error
 
@@ -238,6 +235,7 @@ for line in PROBLEMAS_FILE:
 
     # Format sentence
     sentence = line.replace("ANS", f"{ans}")  # Reemplazar ANS por previo resultado
+    sentence = sentence.replace("-", "+-")  # Dejar resta como suma de numeros negativos
     sentence = sentence.replace(" ", "")  # Quitar espacios
 
     # Aplicar cupones
