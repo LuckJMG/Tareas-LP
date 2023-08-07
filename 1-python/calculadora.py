@@ -23,18 +23,21 @@ def sentence_check(sentence: str) -> bool:
         return False
 
     # Determinar si sentencias en parentesis son correctas
+    operation = sentence
     parenthesis = get_parenthesis(sentence)
-    position = 0
-    while parenthesis != sentence:
+    while parenthesis != operation:
         if not sentence_check(parenthesis):
             return False
-        position += 1
-        parenthesis = get_parenthesis(sentence, position)
+        operation = operation.replace(f"({parenthesis})", "1")
+        parenthesis = get_parenthesis(operation)
 
-    return True
+    if operation == "1\n":
+        return True
+
+    return sentence_check(operation)
 
 
-def get_parenthesis(sentence: str, position: int = 0) -> str:
+def get_parenthesis(sentence: str) -> str:
     """
     ***
     * sentence : str
@@ -68,9 +71,7 @@ def get_parenthesis(sentence: str, position: int = 0) -> str:
                     continue
 
                 parenthesis_count -= 1
-                if position > 0:
-                    position -= 1
-                elif parenthesis_count == 0:
+                if parenthesis_count == 0:
                     end = index
                     return sentence[start:end]
 
