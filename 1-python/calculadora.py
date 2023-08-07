@@ -14,8 +14,6 @@ def sentence_check(sentence: str) -> bool:
     # Descartar errores comunes
     if sentence.count("(") != sentence.count(")"):  # Parentesis sin pares
         return False
-    elif re.search(r"\/\/ *0", sentence) is not None:  #! División por 0
-        return False
 
     # Ver si la sentencia es sintacticamente correcta
     check = re.match(SENTENCIA, sentence)
@@ -128,9 +126,10 @@ def apply_cupon(sentence: str) -> str:
 
     value = int(value)
     optional: bool = percentage != ""
-    percentage = (
-        int(percentage) if optional else 20
-    )  # TODO percentage <= 100 sino error
+    percentage = int(percentage) if optional else 20
+
+    if percentage > 100:
+        return ""  # Porcentaje dado no valido
 
     # Calculo aplicar cupon
     result = int(value * (percentage / 100))
@@ -153,7 +152,11 @@ def calculator(sentence: str) -> int:
     problem: str = sentence
     while "(" in problem:
         subsentence: str = get_parenthesis(problem)
+
         result: int = calculator(subsentence)
+        if result == -1:
+            return result  # Abortar en caso de error
+
         problem = problem.replace(f"({subsentence})", str(result))
 
     # Calculo de operaciones segun prioridad y luego de izquierda a
@@ -167,9 +170,10 @@ def calculator(sentence: str) -> int:
                 case "*":
                     result = left_num * right_num
                 case "//":
-                    result = (
-                        left_num // right_num
-                    )  # TODO Division por cero debe tirar error
+                    if right_num == 0:
+                        return -1  # 0 division error
+
+                    result = left_num // right_num
                 case "-":
                     result = left_num - right_num
                     if result < 0:
@@ -232,11 +236,20 @@ for line in PROBLEMAS_FILE:
     sentence = line.replace("ANS", f"{ans}")  # Reemplazar ANS por previo resultado
     sentence = sentence.replace(" ", "")  # Quitar espacios
 
+    # Aplicar cupones
     while "CUPON" in sentence:
         sentence = apply_cupon(sentence)
 
+    if sentence == "":  # Detección de errores en los cupones (y > 100)
+        result_stack.append("Error")
+        continue
+
     # Añadir resultados
     ans = calculator(sentence)
+    if ans == -1:  # Detección de errores durante el calculo
+        result_stack.append("Error")
+        continue
+
     result_stack.append(ans)
 
 PROBLEMAS_FILE.close()
