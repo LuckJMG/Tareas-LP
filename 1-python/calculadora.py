@@ -181,7 +181,7 @@ def calculator(sentence: str) -> int:
                 case "+":
                     result = left_num + right_num
                 case _:
-                    result = -1  # Error
+                    result = -1  # Unknown operator error
 
             problem = problem.replace(f"{left_num}{operator}{right_num}", str(result))
 
@@ -232,7 +232,11 @@ for line in PROBLEMAS_FILE:
         result_stack.append("Error")
         continue
 
-    # Formatear sentencia de una forma mas simple
+    if "Error" in result_stack:
+        result_stack.append("")
+        continue
+
+    # Format sentence
     sentence = line.replace("ANS", f"{ans}")  # Reemplazar ANS por previo resultado
     sentence = sentence.replace(" ", "")  # Quitar espacios
 
