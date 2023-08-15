@@ -148,7 +148,7 @@ def calculator(sentence: str, ans: int) -> int:
             return -1
 
     # Calculo de operaciones segun prioridad y luego de izquierda a derecha
-    OPERATORS = ["*", "//", "+"]
+    OPERATORS = ["//", "*", "+"]
     for operator in OPERATORS:
         while operator in problem:
             (left_num, right_num) = get_numbers(problem, operator)
