@@ -139,7 +139,6 @@ def calculator(sentence: str, ans: int) -> int:
     # Formatear problema
     problem = problem.replace("ANS", f"{ans}")  # Reemplazar ANS por previo resultado
     problem = problem.replace(" ", "")  # Eliminar espacios
-    problem = problem.replace("-", "+-")  # Dejar resta como suma de numeros negativos
 
     # Aplicar cupones
     while "CUPON" in problem:
@@ -148,27 +147,43 @@ def calculator(sentence: str, ans: int) -> int:
             return -1
 
     # Calculo de operaciones segun prioridad y luego de izquierda a derecha
-    OPERATORS = ["//", "*", "+"]
-    for operator in OPERATORS:
-        while operator in problem:
-            (left_num, right_num) = get_numbers(problem, operator)
+    operators = ["*", "//", "+", "-"]
+    while re.fullmatch(ENTERO, problem) is None:
+        # Cambio de prioridad
+        if operators[0] not in problem and operators[1] not in problem:
+            operators.pop(0)
+            operators.pop(0)
 
-            match operator:
-                case "*":
-                    result = left_num * right_num
-                case "//":
-                    if right_num == 0:
-                        return -1  # 0 division error
+        # Encontrar primer operador de izquierda a derecha en la prioridad actual
+        operator_index1 = problem.find(operators[0])
+        operator_index2 = problem.find(operators[1])
+        if (
+            operator_index1 < operator_index2 and operator_index1 != -1
+        ) or operator_index2 == -1:
+            operator = operators[0]
+        else:
+            operator = operators[1]
 
-                    result = left_num // right_num
-                case "+":
-                    result = left_num + right_num
-                    if result < 0:
-                        result = 0
-                case _:
-                    result = -1  # Unknown operator error
+        (left_num, right_num) = get_numbers(problem, operator)
 
-            problem = problem.replace(f"{left_num}{operator}{right_num}", str(result))
+        match operator:
+            case "*":
+                result = left_num * right_num
+            case "//":
+                if right_num == 0:
+                    return -1  # 0 division error
+
+                result = left_num // right_num
+            case "+":
+                result = left_num + right_num
+            case "-":
+                result = left_num - right_num
+                if result < 0:
+                    result = 0
+            case _:
+                result = -1  # Unknown operator error
+
+        problem = problem.replace(f"{left_num}{operator}{right_num}", str(result))
 
     return int(problem)
 
