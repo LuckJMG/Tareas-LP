@@ -35,8 +35,24 @@ ANS // 3 = 611
 
 ((((1)))) = Error
 
-((((2+3)))) = 5
+((((2+3)))) = Error
 
 (5) + (300) = Error
 
 300 * 1 // 3 = 100
+
+4 * = Error
+1 - 1 = Sin resolver
+4 // ANS = Error
+
+4 * = Error
+2 - 1 = Sin resolver
+4 // ANS = Sin resolver
+
+4 * = Error
+2 - 1 = Sin resolver
+4 + ANS = Sin resolver
+
+2 + CUPON(100, 120) = Error
+
+CUPON(40) = Error

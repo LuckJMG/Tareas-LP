@@ -233,6 +233,11 @@ for line in PROBLEMAS_FILE:
         result_stack.append("Error")
         continue
 
+    # Chequeo de doble parentesis
+    if re.search(r"\(\(.*\)\)", sentence) is not None:
+        result_stack.append("Error")
+        continue
+
     # Añadir resultados
     ans = calculator(sentence, ans)
     if ans == -1:  # Detección de errores durante el calculo
