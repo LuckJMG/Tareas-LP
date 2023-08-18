@@ -50,7 +50,7 @@ def get_numbers(sentence: str, operator: str) -> (int, int):
     ***
     De una sentencia correcta, busca el primer operador (el entregado) que se encuentra en
     la sentencia, y extrae los números que son parte de la operación en una tupla
-    de dos numeroa (izquierda, derecha).
+    de dos numeros (izquierda, derecha).
     """
 
     operation = re.search(rf"\-?({ENTERO})\{operator}\-?({ENTERO})", sentence).group(0)
