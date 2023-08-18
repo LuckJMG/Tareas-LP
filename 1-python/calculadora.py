@@ -127,6 +127,7 @@ def calculator(sentence: str, ans: int) -> int:
             return result  # Abortar en caso de error
 
         problem = problem.replace(f"({subsentence})", str(result))
+
         # Caso de que el reemplazo sea el resultado final
         if re.fullmatch("[0-9]+", problem) is not None:
             return result
@@ -234,7 +235,7 @@ for line in PROBLEMAS_FILE:
         continue
 
     # Chequeo de doble parentesis
-    if re.search(r"\(\(.*\)\)", sentence) is not None:
+    if re.search(rf"\(\({SENTENCIA}\)\)", sentence) is not None:
         result_stack.append("Error")
         continue
 

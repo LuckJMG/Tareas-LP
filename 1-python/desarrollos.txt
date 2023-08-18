@@ -56,3 +56,7 @@ ANS // 3 = 611
 2 + CUPON(100, 120) = Error
 
 CUPON(40) = Error
+
+((2 + 3) + (4 + 5)) = 14
+
+    3     *     9 = Error
