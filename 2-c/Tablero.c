@@ -20,21 +20,21 @@ void IniciarTablero(int n)
     tablero = (void ***)malloc(sizeof(void **) * dimension);
     tablero_bombas = (int **)malloc(sizeof(int *) * dimension);
 
-    for (int row = 0; row < dimension; row++)
+    for (int fila = 0; fila < dimension; fila++)
     {
-        tablero[row] = (void **)malloc(sizeof(void *) * dimension);
-        tablero_bombas[row] = (int *)malloc(sizeof(int) * dimension);
+        tablero[fila] = (void **)malloc(sizeof(void *) * dimension);
+        tablero_bombas[fila] = (int *)malloc(sizeof(int) * dimension);
 
-        for (int column = 0; column < dimension; column++)
+        for (int columna = 0; columna < dimension; columna++)
         {
             Tierra *tierra = (Tierra *)malloc(sizeof(Tierra));
             tierra->vida = rand() % max_vida + 1;
             tierra->es_tesoro = rand() % 100 + 1 <= porcentaje_tesoro;
-            tablero[row][column] = tierra;
+            tablero[fila][columna] = tierra;
 
             if (tierra->es_tesoro)
                 cantidad_tesoros++;
-            tablero_bombas[row][column] = 0;
+            tablero_bombas[fila][columna] = 0;
         }
     }
 
@@ -50,14 +50,14 @@ void IniciarTablero(int n)
 
 void PasarTurno()
 {
-    for (int row = 0; row < dimension; row++)
+    for (int fila = 0; fila < dimension; fila++)
     {
-        for (int column = 0; column < dimension; column++)
+        for (int columna = 0; columna < dimension; columna++)
         {
-            if (!tablero_bombas[row][column])
+            if (!tablero_bombas[fila][columna])
                 continue;
 
-            TryExplotar(row, column);
+            TryExplotar(fila, columna);
         }
     }
 
@@ -79,21 +79,21 @@ void ColocarBomba(Bomba *b, int fila, int columna)
 void MostrarTablero()
 {
     tesoros_encontrados = 0;
-    for (int row = 0; row < dimension; row++)
+    for (int fila = 0; fila < dimension; fila++)
     {
-        for (int column = 0; column < dimension; column++)
+        for (int columna = 0; columna < dimension; columna++)
         {
             char bar = '|';
-            if (column == 0)
+            if (columna == 0)
                 bar = '\0';
 
-            if (tablero_bombas[row][column])
+            if (tablero_bombas[fila][columna])
             {
                 printf("%c o ", bar);
                 continue;
             }
 
-            Tierra *tierra = (Tierra *)tablero[row][column];
+            Tierra *tierra = (Tierra *)tablero[fila][columna];
             if (tierra->es_tesoro && tierra->vida == 0)
             {
                 printf("%c * ", bar);
@@ -112,16 +112,16 @@ void MostrarTablero()
 
 void MostrarBombas()
 {
-    for (int row = 0; row < dimension; row++)
+    for (int fila = 0; fila < dimension; fila++)
     {
-        for (int column = 0; column < dimension; column++)
+        for (int columna = 0; columna < dimension; columna++)
         {
-            if (!tablero_bombas[row][column])
+            if (!tablero_bombas[fila][columna])
                 continue;
 
-            Bomba *bomba = (Bomba *)tablero[row][column];
+            Bomba *bomba = (Bomba *)tablero[fila][columna];
             printf("Turnos para explotar: %d\n", bomba->contador_turnos);
-            printf("Coordenada: %d %d\n", row, column);
+            printf("Coordenada: %d %d\n", fila, columna);
             if (bomba->explotar == *ExplosionPunto)
                 printf("Forma Explosión: ExplosionPunto\n");
             else
@@ -135,17 +135,17 @@ void MostrarBombas()
 
 void VerTesoros()
 {
-    for (int row = 0; row < dimension; row++)
+    for (int fila = 0; fila < dimension; fila++)
     {
-        for (int column = 0; column < dimension; column++)
+        for (int columna = 0; columna < dimension; columna++)
         {
             char bar = '|';
-            if (column == 0)
+            if (columna == 0)
                 bar = '\0';
 
-            if (tablero_bombas[row][column])
+            if (tablero_bombas[fila][columna])
             {
-                Bomba *bomba = (Bomba *)tablero[row][column];
+                Bomba *bomba = (Bomba *)tablero[fila][columna];
                 if (bomba->tierra_debajo->es_tesoro)
                 {
                     printf("%c * ", bar);
@@ -156,14 +156,14 @@ void VerTesoros()
                 continue;
             }
 
-            Tierra *tierra = (Tierra *)tablero[row][column];
+            Tierra *tierra = (Tierra *)tablero[fila][columna];
             if (tierra->es_tesoro)
             {
                 printf("%c * ", bar);
                 continue;
             }
 
-            printf("%c %d ", bar, ((Tierra *)tablero[row][column])->vida);
+            printf("%c %d ", bar, ((Tierra *)tablero[fila][columna])->vida);
         }
         printf("\n");
     }
@@ -173,17 +173,17 @@ void VerTesoros()
 
 void BorrarTablero()
 {
-    for (int row = 0; row < dimension; row++)
+    for (int fila = 0; fila < dimension; fila++)
     {
-        for (int column = 0; column < dimension; column++)
+        for (int columna = 0; columna < dimension; columna++)
         {
-            if (tablero_bombas[row][column])
-                BorrarBomba(row, column);
-            free(tablero[row][column]);
+            if (tablero_bombas[fila][columna])
+                free(((Bomba *)tablero[fila][columna])->tierra_debajo);
+            free(tablero[fila][columna]);
         }
 
-        free(tablero_bombas[row]);
-        free(tablero[row]);
+        free(tablero_bombas[fila]);
+        free(tablero[fila]);
     }
 
     free(tablero_bombas);

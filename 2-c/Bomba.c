@@ -40,13 +40,12 @@ void ExplosionPunto(int fila, int columna)
 
 void ExplosionX(int fila, int columna)
 {
-    ((Tierra *)tablero[fila][columna])->vida--;
-
     int fila_arriba = SerieCircular(fila, 1);
     int fila_abajo = SerieCircular(fila, 0);
     int columna_izquierda = SerieCircular(columna, 1);
     int columna_derecha = SerieCircular(columna, 0);
 
+    BajarVida(fila, columna);
     BajarVida(fila_arriba, columna_izquierda);
     BajarVida(fila_arriba, columna_derecha);
     BajarVida(fila_abajo, columna_izquierda);
@@ -55,15 +54,15 @@ void ExplosionX(int fila, int columna)
     return;
 }
 
-int SerieCircular(int n, int substraction)
+int SerieCircular(int n, int resta)
 {
-    if (n == 0 && substraction)
+    if (n == 0 && resta)
         return dimension - 1;
-    else if (n == dimension - 1 && !substraction)
+    else if (n == dimension - 1 && !resta)
         return 0;
     else
     {
-        if (substraction)
+        if (resta)
             return n - 1;
         else
             return n + 1;
