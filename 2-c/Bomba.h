@@ -13,5 +13,7 @@ void TryExplotar(int fila, int columna);
 void BorrarBomba(int fila, int columna);
 void ExplosionPunto(int fila, int columna);
 void ExplosionX(int fila, int columna);
+int SerieCircular(int n, int substraction);
+void BajarVida(int fila, int columna);
 
 #endif
