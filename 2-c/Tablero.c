@@ -44,8 +44,6 @@ void IniciarTablero(int n)
         BorrarTablero();
         IniciarTablero(n);
     }
-
-    return;
 }
 
 void PasarTurno()
@@ -60,8 +58,6 @@ void PasarTurno()
             TryExplotar(fila, columna);
         }
     }
-
-    return;
 }
 
 void ColocarBomba(Bomba *b, int fila, int columna)
@@ -106,8 +102,6 @@ void MostrarTablero()
 
         printf("\n");
     }
-
-    return;
 }
 
 void MostrarBombas()
@@ -167,8 +161,6 @@ void VerTesoros()
         }
         printf("\n");
     }
-
-    return;
 }
 
 void BorrarTablero()
@@ -188,5 +180,4 @@ void BorrarTablero()
 
     free(tablero_bombas);
     free(tablero);
-    return;
 }
