@@ -13,3 +13,7 @@ Bomba.h:
 
 Tablero.h:
 - Se agrego '#include "Bomba.h"' para compatibilidad
+- Se agrego la variable "tablero_bombas" para que Bomba.c pueda acceder
+    al tablero de tipos.
+- Se agregaron las variables "cantidad_tesoros" y "tesoros_encontrados" para que TreasureFinder.c
+    pueda saber cuando se han encontrado todos los tesoros y así finalizar el juego.
