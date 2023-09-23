@@ -49,8 +49,7 @@ public class Juego {
 		while (true) {
 			turno++;
 
-			// Finales
-			/// Bad Ending (Se acabaron las 30 horas)
+			// Bad Ending (Se acabaron las 30 horas)
 			if (turno > 30) {
 				System.out.println(
 					  ": Mira lo que has hecho, Lomiar se ha quedado sin oxigeno y ha muerto por tu culpa.\n"
@@ -61,7 +60,12 @@ public class Juego {
 				break;
 			}
 
-			/// Good Ending (Conseguiste escapar a tiempo)
+			// Interactuar con la zona actual
+			System.out.println("\n----------------------------------------------------------------------\n");
+			mapa[posicion].interactuar(cyan, magenta, amarillo);
+			System.out.println("");
+
+			// Good Ending (Conseguiste escapar a tiempo)
 			if (Pieza.piezasEncontradas >= 3) {
 				System.out.println(
 					  ": Has encontrado todas las piezas!!!\n"
@@ -73,18 +77,13 @@ public class Juego {
 				break;
 			}
 
-			// Interactuar con la zona actual
-			System.out.println("\n----------------------------------------------------------------------\n");
-			mapa[posicion].interactuar(cyan, magenta, amarillo);
-			System.out.println("");
-
 			// Mostrar datos del turno actual
 			System.out.println(
 				  "| Horas de Oxigeno Restante: " + (31 - turno) + " horas\n"
 				+ "| Pikinims:\n"
 				+ "| - Cyan     (ATK 1 | CAP 1): " + cyan.getCantidad() + "\n"
 				+ "| - Magenta  (ATK 2 | CAP 1): " + magenta.getCantidad() + "\n"
-				+ "| - Amarillo (ATK 1 | CAP 3): " + cyan.getCantidad() + "\n"
+				+ "| - Amarillo (ATK 1 | CAP 3): " + amarillo.getCantidad() + "\n"
 				+ "| Piezas Encontradas: " + Pieza.piezasEncontradas + "/3\n"
 				+ "| Zona Actual: " + mapa[posicion].getClass().getName() + "\n"
 			);

@@ -9,7 +9,7 @@ public class Zona {
 		return completada;
 	}
 
-	protected void interactuar(Cyan pikinimCyan, Magenta pikinimMagenta, Amarillo pikinimAmarillo) {
-		System.out.println("\n: Ya has hecho todo lo que puedes hacer aquí, no queda nada por hacer.\n");
+	protected void interactuar(Cyan cyan, Magenta magenta, Amarillo amarillo) {
+		System.out.println(": Ya has hecho todo lo que puedes hacer aquí, no queda nada por hacer.");
 	}
 }

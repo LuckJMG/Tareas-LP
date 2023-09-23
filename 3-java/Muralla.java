@@ -5,41 +5,47 @@ public class Muralla extends Zona {
 		this.vida = vida;
 	}
 
-	public int getVida() {
-		return vida;
-	}
-
-	public void setVida(int vida) {
-		this.vida = vida;
-	}
-
-	public void interactuar(Cyan pikinimCyan, Magenta pikinimMagenta, Amarillo pikinimAmarillo) {
+	public void interactuar(Cyan cyan, Magenta magenta, Amarillo amarillo) {
+		// Chequeo de si está completada
 		if (this.completada) {
-			super.interactuar(pikinimCyan, pikinimMagenta, pikinimAmarillo);
+			super.interactuar(cyan, magenta, amarillo);
 			return;
 		}
 
-		System.out.println("\n: Te encuentras una muralla que cubre el camino de cal a canto.");
-		System.out.println(": Haras el mejor intento de romperla lanzando a los pobres pikinims que te acompañan.\n");
+		System.out.println(
+			  ": Te encuentras una muralla que cubre el camino de cal a canto.\n"
+			+ ": Haras el mejor intento de romperla lanzando a los pobres pikinims que te acompañan.\n"
+		);
 
-		if (tryRomper(pikinimCyan, pikinimMagenta, pikinimAmarillo)) {
+		// Intentar romper la muralla
+		if (tryRomper(cyan, magenta, amarillo)) {
 			this.completada = true;
+
 			System.out.println(
-					": A pesar del futil esfuerzo que haces para recuperar las piezas, has DESTRUIDO la muralla!!!");
-			System.out.println(": El camino que antes estaba cerrado se abré ante tí.");
-			System.out.println(": Que te esperara al otro lado de la muralla?\n");
+				  ": A pesar del futil esfuerzo que haces para recuperar las piezas, has DESTRUIDO la muralla!!!\n"
+				+ ": El camino que antes estaba cerrado se abré ante tí.\n"
+				+ ": Que te esperara al otro lado de la muralla?"
+			);
+
 			return;
 		}
 
-		System.out.println(": Ay que pena, NO pudiste DESTRUIR ni esta fragil muralla.");
-		System.out.println(": A la muralla le quedan " + this.vida + " puntos de vida.");
-		System.out.println(": Por si quieres hacer el futil intento de destruirla de nuevo.\n");
+		// No se pudo destruir
+		System.out.println(
+			  ": Ay que pena, NO pudiste DESTRUIR ni esta fragil muralla.\n"
+			+ ": A la muralla le quedan " + this.vida + " puntos de vida.\n"
+			+ ": Por si quieres hacer el futil intento de destruirla de nuevo."
+		);
 	}
 
-	private boolean tryRomper(Cyan pikinimCyan, Magenta pikinimMagenta, Amarillo pikinimAmarillo) {
-		this.vida -= pikinimCyan.getCantidad() * pikinimCyan.getAtaque();
-		this.vida -= pikinimMagenta.getCantidad() * pikinimMagenta.getAtaque();
-		this.vida -= pikinimAmarillo.getCantidad() * pikinimAmarillo.getAtaque();
+	private boolean tryRomper(Cyan cyan, Magenta magenta, Amarillo amarillo) {
+		// Calculo de daño causado
+		this.vida -= cyan.getCantidad() * cyan.getAtaque();
+		this.vida -= magenta.getCantidad() * magenta.getAtaque();
+		this.vida -= amarillo.getCantidad() * amarillo.getAtaque();
+
+		if (vida < 0)
+			vida = 0;
 
 		return vida <= 0;
 	}

@@ -67,7 +67,7 @@ public class Enemigo extends Zona implements ILevantar {
 					amarillo.disminuir(this.ataque);
 					System.out.println(
 						  ": El enemigo les hace la envolvente y PUMMMM!!! "
-								+ this.ataque + " pikinims amarillos han muerto en combate\n"
+								+ this.ataque + " pikinims amarillos han muerto en combate.\n"
 						+ ": Su servicio nunca será olvidado, seran conmemorados todos los años en esta misma fecha... hasta que todos se olviden de ellos."
 					);
 					break;
@@ -94,8 +94,8 @@ public class Enemigo extends Zona implements ILevantar {
 
 		if (capacidadTotal >= peso) {
 			System.out.println(
-				": Con todas tus fuerza (la de los pikimins) logras levantar al enemigo\n"
-				+ ": Y tal cual un azteca, te comeras a tu enemigo para hacer tuya su fuerza\n"
+				": Con todas tus fuerza (la de los pikimins) logras levantar al enemigo.\n"
+				+ ": Y tal cual un azteca, te comeras a tu enemigo para hacer tuya su fuerza.\n"
 			);
 
 			// Elección de que color aumentar
@@ -135,8 +135,8 @@ public class Enemigo extends Zona implements ILevantar {
 
 				default:
 					System.out.println(
-						  ": Acabo de decir que era 1, 2 y 3, no era tan complicado\n"
-						+ ": Por error o por hacerte el chistosito perdiste una hora de vida\n"
+						  ": Acabo de decir que era 1, 2 y 3, no era tan complicado.\n"
+						+ ": Por error o por hacerte el chistosito perdiste una hora de vida.\n"
 						+ ": (Sinceramente me dio paja programar el intentar de nuevo)"
 					);
 					break;

@@ -1,8 +1,8 @@
 public class Magenta extends Pikinim {
 	public Magenta() {
-		ataque = 2;
-		capacidad = 1;
-		cantidad = 10;
+		this.ataque = 2;
+		this.capacidad = 1;
+		this.cantidad = 10;
 	}
 
 	public void multiplicar(int cantidad) {
