@@ -7,7 +7,7 @@ public class Pildora extends Zona {
 
 	public void interactuar(Cyan cyan, Magenta magenta, Amarillo amarillo) {
 		// Chequeo de si está completada
-		if (this.completada) {
+		if (this.isCompletada()) {
 			super.interactuar(cyan, magenta, amarillo);
 			return;
 		}
@@ -31,27 +31,27 @@ public class Pildora extends Zona {
 			case 1:
 				cyan.multiplicar(this.cantidad);
 				System.out.println(
-					"\n: Los pikinim cyan ahora son " + cyan.getCantidad() + "!"
+					"\n! Los pikinim cyan ahora son " + cyan.getCantidad() + "!"
 				);
-				this.completada = true;
+				this.completar();
 				break;
 
 			case 2:
 				magenta.multiplicar(this.cantidad);
 				System.out.println(
-					"\n: Los pikinim magenta ahora son " + magenta.getCantidad()
+					"\n! Los pikinim magenta ahora son " + magenta.getCantidad()
 						+ "!"
 				);
-				this.completada = true;
+				this.completar();
 				break;
 
 			case 3:
 				amarillo.multiplicar(this.cantidad);
 				System.out.println(
-					"\n: Los pikinim amarillos ahora son " + amarillo.getCantidad()
+					"\n! Los pikinim amarillos ahora son " + amarillo.getCantidad()
 						+ "!"
 				);
-				this.completada = true;
+				this.completar();
 				break;
 
 			default:
@@ -65,4 +65,11 @@ public class Pildora extends Zona {
 		}
 	}
 
+	public String getInfo() {
+		if (this.isCompletada()) {
+			return super.getInfo();
+		}
+
+		return "Pildora (CANT " + this.cantidad + ")";
+	}
 }

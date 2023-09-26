@@ -7,7 +7,7 @@ public class Muralla extends Zona {
 
 	public void interactuar(Cyan cyan, Magenta magenta, Amarillo amarillo) {
 		// Chequeo de si está completada
-		if (this.completada) {
+		if (this.isCompletada()) {
 			super.interactuar(cyan, magenta, amarillo);
 			return;
 		}
@@ -19,12 +19,12 @@ public class Muralla extends Zona {
 
 		// Intentar romper la muralla
 		if (tryRomper(cyan, magenta, amarillo)) {
-			this.completada = true;
+			this.completar();
 
 			System.out.println(
-				  ": A pesar del futil esfuerzo que haces para recuperar las piezas, has DESTRUIDO la muralla!!!\n"
-				+ ": El camino que antes estaba cerrado se abré ante tí.\n"
-				+ ": Que te esperara al otro lado de la muralla?"
+				  "! A pesar del futil esfuerzo que haces para recuperar las piezas, has DESTRUIDO la muralla!!!\n"
+				+ "! El camino que antes estaba cerrado se abré ante tí.\n"
+				+ "! Que te esperara al otro lado de la muralla?"
 			);
 
 			return;
@@ -32,9 +32,9 @@ public class Muralla extends Zona {
 
 		// No se pudo destruir
 		System.out.println(
-			  ": Ay que pena, NO pudiste DESTRUIR ni esta fragil muralla.\n"
-			+ ": A la muralla le quedan " + this.vida + " puntos de vida.\n"
-			+ ": Por si quieres hacer el futil intento de destruirla de nuevo."
+			  "! Ay que pena, NO pudiste DESTRUIR ni esta fragil muralla.\n"
+			+ "! A la muralla le quedan " + this.vida + " puntos de vida.\n"
+			+ "! Por si quieres hacer el futil intento de destruirla de nuevo."
 		);
 	}
 
@@ -48,5 +48,13 @@ public class Muralla extends Zona {
 			vida = 0;
 
 		return vida <= 0;
+	}
+
+	public String getInfo() {
+		if (this.isCompletada()) {
+			return super.getInfo();
+		}
+
+		return "Muralla (HP " + this.vida + ")";
 	}
 }

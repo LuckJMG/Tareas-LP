@@ -25,8 +25,8 @@ public class Juego {
 		Magenta magenta = new Magenta();
 		Amarillo amarillo = new Amarillo();
 
-		int posicion = 5;
 		int turno = 0;
+		int posicion = 5;
 		int direccion = 0; // 1 izqueirda, 2 derecha
 		int noPuedePasar = 0;
 		// 0 se puede pasar
@@ -35,21 +35,47 @@ public class Juego {
 
 		// Introducción
 		System.out.println(
-			  "> MAL ATERRIZAJE\n"
+			  "\n\n=== MAL ATERRIZAJE ===\n\n"
 			+ "> Choqué con un asteroide en un viaje de rutina a comprar leche para mis hijos y ahora me encuentro solo en un planeta extraño.\n"
 			+ "> Mi nave está destrozada y no sé a dónde fueron a parar sus piezas.\n"
 			+ "> Por suerte he encontrado unas criaturas curiosas, a lo mejor pueden ayudarme a volver a casa.\n"
 			+ "> (Convenientemente para el plot) Se ven emocionados de conocerme.\n"
 			+ "> Los llamaré pikinims (nombre protegido bajo las leyes de copyright sansanas ©),\n"
 			+ "> porque cada uno puede levantar exactamente un kilopikinim de peso.\n"
-			+ "> Debo ser veloz, no queda tanto para que se acabe el tanque de oxígeno, solo me quedan 30 horas."
+			+ "> Debo ser veloz, no queda tanto para que se acabe el tanque de oxígeno, solo me quedan 30 horas.\n"
+		);
+
+		System.out.println(
+			  "> Comentario de Lomiar\n"
+			+ "| Información del turno\n"
+			+ ": Narrador / Información de la Zona\n"
+			+ "! Acción\n"
+			+ "? Elección"
 		);
 
 		// Loop principal de juego
 		while (true) {
 			turno++;
 
-			// Bad Ending (Se acabaron las 30 horas)
+			// Interactuar con la zona actual
+			System.out.println("\n----------------------------------------------------------------------\n");
+			mapa[posicion].interactuar(cyan, magenta, amarillo);
+			System.out.println("");
+
+			// Finales
+			/// Good Ending (Conseguiste escapar a tiempo)
+			if (Pieza.piezasEncontradas >= 3) {
+				System.out.println(
+					  ": Has encontrado todas las piezas!!!\n"
+					+ ": Quien diria que lograrias conseguirlas a tiempo.\n"
+					+ ": Ahora escapas del planeta, dejando abandonados a los pikinims que hicieron la mayor parte del trabajo. Que agradecido eres.\n"
+					+ ": Ahora por fín podrás ir a comprar la leche para tus hijos y volver para el desayuno.\n"
+					+ "\n\n=== YOU WIN ===\n\n"
+				);
+				break;
+			}
+
+			/// Bad Ending 1 (Se acabaron las 30 horas)
 			if (turno > 30) {
 				System.out.println(
 					  ": Mira lo que has hecho, Lomiar se ha quedado sin oxigeno y ha muerto por tu culpa.\n"
@@ -60,19 +86,16 @@ public class Juego {
 				break;
 			}
 
-			// Interactuar con la zona actual
-			System.out.println("\n----------------------------------------------------------------------\n");
-			mapa[posicion].interactuar(cyan, magenta, amarillo);
-			System.out.println("");
-
-			// Good Ending (Conseguiste escapar a tiempo)
-			if (Pieza.piezasEncontradas >= 3) {
+			/// Bad Ending 2 (No te quedan pikinims)
+			if (cyan.getCantidad() + magenta.getCantidad() + amarillo.getCantidad() == 0) {
 				System.out.println(
-					  ": Has encontrado todas las piezas!!!\n"
-					+ ": Quien diria que lograrias conseguirlas a tiempo.\n"
-					+ ": Ahora escapas del planeta, dejando abandonados a los pikinims que hicieron la mayor parte del trabajo. Que agradecido eres.\n"
-					+ ": Ahora por fín podrás ir a comprar la leche para tus hijos y volver para el desayuno.\n"
-					+ "\n\n=== YOU WIN ===\n\n"
+					  ": Acabaste por matar hasta el último de tus pequeños compañeros.\n"
+					+ ": Ellos solo te querían ayudar a volver a tu hogar y tu que hiciste.\n"
+					+ ": Los tiraste contra un enemigo que sabías contra el que no podían ganar.\n"
+					+ ": Y solo por querer llegar una hora antes a tu casa.\n"
+					+ ": Reflexiona lo que hiciste en el rincón, porque no solo perdiste el juego.\n"
+					+ ": También perdiste valiosos compañeros que nunca valoraste.\n"
+					+ "\n\n=== GAME OVER ===\n\n"
 				);
 				break;
 			}
@@ -85,50 +108,53 @@ public class Juego {
 				+ "| - Magenta  (ATK 2 | CAP 1): " + magenta.getCantidad() + "\n"
 				+ "| - Amarillo (ATK 1 | CAP 3): " + amarillo.getCantidad() + "\n"
 				+ "| Piezas Encontradas: " + Pieza.piezasEncontradas + "/3\n"
-				+ "| Zona Actual: " + mapa[posicion].getClass().getName() + "\n"
+				+ "| Zonas Completadas: " + Zona.getZonasCompletadas() + "/11\n"
+				+ "| Zona Actual: " + mapa[posicion].getInfo() + "\n"
 			);
 
 			// Elección de en que gastar el turno
 			System.out.println("? Hacia donde quieres ir?");
 
+			// Chequeo de circunavegación
+			int posicionIzq = 0;
+			if (posicion == 0) {
+				posicionIzq = 10;
+			} else {
+				posicionIzq = posicion - 1;
+			}
+
+			int posicionDer = 0;
+			if (posicion == 10) {
+				posicionDer = 0;
+			} else {
+				posicionDer = posicion + 1;
+			}
+
 			// Chequeo de murallas
 			if (mapa[posicion].getClass().getName() == "Muralla" && !mapa[posicion].isCompletada()) {
 				if (direccion == 1) {
 					System.out.println(
-						"? 2. Derecha ("
-							+ mapa[posicion + 1].getClass().getName()
+						  "? La muralla bloquea tu paso a la izquierda.\n"
+						+ "? 2. Derecha ("
+							+ mapa[posicionDer].getInfo()
 							+ ")   3. Quedarse aquí"
 					);
 					noPuedePasar = 1;
 				} else if (direccion == 2) {
 					System.out.println(
-						"? 1. Izquierda ("
-							+ mapa[posicion - 1].getClass().getName()
+						  "? La muralla bloquea tu paso a la derecha.\n"
+						+ "? 1. Izquierda ("
+							+ mapa[posicionIzq].getInfo()
 							+ ")   3. Quedarse aquí"
 					);
 					noPuedePasar = 2;
 				}
-			// Chequeo de circunavegación
 			} else {
-				int posicionIzq = 0;
-				if (posicion == 0) {
-					posicionIzq = 10;
-				} else {
-					posicionIzq = posicion - 1;
-				}
-
-				int posicionDer = 0;
-				if (posicion == 10) {
-					posicionDer = 0;
-				} else {
-					posicionDer = posicion + 1;
-				}
-
 				// Decisión default
 				System.out.println(
-					"? 1. Izquierda (" + mapa[posicionIzq].getClass().getName()
+					"? 1. Izquierda (" + mapa[posicionIzq].getInfo()
 						+ ")   2. Derecha ("
-						+ mapa[posicionDer].getClass().getName()
+						+ mapa[posicionDer].getInfo()
 						+ ")   3. Quedarse aquí"
 				);
 				noPuedePasar = 0;
@@ -168,6 +194,7 @@ public class Juego {
 				+ " - Magenta " + magenta.getCantidad() + " - Amarillos "
 				+ amarillo.getCantidad() + "\n"
 			+ "| Piezas Encontradas: " + Pieza.piezasEncontradas + "/3\n"
+			+ "| Zonas Completadas: " + Zona.getZonasCompletadas() + "/11\n"
 			+ "======================================================================"
 		);
 

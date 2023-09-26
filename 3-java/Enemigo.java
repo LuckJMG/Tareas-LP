@@ -13,7 +13,7 @@ public class Enemigo extends Zona implements ILevantar {
 
 	public void interactuar(Cyan cyan, Magenta magenta, Amarillo amarillo) {
 		// Chequeo de si está completada
-		if (this.completada) {
+		if (this.isCompletada()) {
 			super.interactuar(cyan, magenta, amarillo);
 			return;
 		}
@@ -22,65 +22,83 @@ public class Enemigo extends Zona implements ILevantar {
 	}
 
 	private boolean Pelear(Cyan cyan, Magenta magenta, Amarillo amarillo) {
-		if (this.vida > 0) {
-			System.out.println(
-				  ": Te pones el reto de ir a pelear contra el enemigo que acecha en esta zona.\n"
-				+ ": (Y con ir a pelear, te refieres tirar a los pikinims que conociste hace menos de 30 horas a su segura muerte)\n"
-			);
+		System.out.println(
+				": Te pones el reto de ir a pelear contra el enemigo que acecha en esta zona.\n"
+			+ ": (Y con ir a pelear, te refieres tirar a los pikinims que conociste hace menos de 30 horas a su segura muerte)\n"
+		);
 
-			// Caculo daño causado
-			int ataqueTotal = 0;
-			ataqueTotal += cyan.getCantidad() * cyan.getAtaque();
-			ataqueTotal += magenta.getCantidad() * magenta.getAtaque();
-			ataqueTotal += amarillo.getCantidad() * amarillo.getAtaque();
-			this.vida -= ataqueTotal;
+		// Caculo daño causado
+		int ataqueTotal = 0;
+		ataqueTotal += cyan.getCantidad() * cyan.getAtaque();
+		ataqueTotal += magenta.getCantidad() * magenta.getAtaque();
+		ataqueTotal += amarillo.getCantidad() * amarillo.getAtaque();
+		this.vida -= ataqueTotal;
 
-			if (this.vida < 0)
-				this.vida = 0;
+		if (this.vida < 0)
+			this.vida = 0;
 
-			System.out.println(
-				  ": PIM! PAM! PUM!\n"
-				+ ": Dejaste al enemigo con " + this.vida + " de vida!!!\n"
-			);
+		System.out.println(
+				"! PIM! PAM! PUM!\n"
+			+ "! Dejaste al enemigo con " + this.vida + " de vida!!!\n"
+		);
 
-			// Calculo de daño recibido
-			Random rand = new Random();
+		// Calculo de daño recibido
+		Random rand = new Random();
+		boolean seguirMatando = true;
+		while (seguirMatando) {
 			int randomNumber = rand.nextInt(3) + 1;
 			switch (randomNumber) {
 				case 1:
-					cyan.disminuir(this.ataque);
+					if (cyan.getCantidad() == 0)
+						continue;
 					System.out.println(
-						  ": Oh no! Han muerto " + this.ataque + " pikinims cyan de un puro wate.\n"
-						+ ": Parece que a los pikinims cyan les falta calle."
+						  "! Oh no! Han muerto "
+							+ (this.ataque < cyan.getCantidad() ? this.ataque : cyan.getCantidad())
+							+ " pikinims cyan de un puro wate.\n"
+						+ "! Parece que a los pikinims cyan les falta calle."
 					);
+					cyan.disminuir(this.ataque);
+					seguirMatando = false;
 					break;
 
 				case 2:
-					magenta.disminuir(this.ataque);
+					if (magenta.getCantidad() == 0)
+						continue;
 					System.out.println(
-						  ": Despues del ajuste de cuentas, " + this.ataque + " pikinims magenta han fallecido.\n"
-						+ ": El pesar que sientes ahora mismo durara hasta que el sucio alcohol te lo haga olvidar."
+						  "! Despues del ajuste de cuentas, "
+							+ (this.ataque < magenta.getCantidad() ? this.ataque : magenta.getCantidad())
+							+ " pikinims magenta han fallecido.\n"
+						+ "! El pesar que sientes ahora mismo durara hasta que el sucio alcohol te lo haga olvidar."
 					);
+					magenta.disminuir(this.ataque);
+					seguirMatando = false;
 					break;
 
 				case 3:
-					amarillo.disminuir(this.ataque);
+					if (amarillo.getCantidad() == 0)
+						continue;
 					System.out.println(
-						  ": El enemigo les hace la envolvente y PUMMMM!!! "
-								+ this.ataque + " pikinims amarillos han muerto en combate.\n"
-						+ ": Su servicio nunca será olvidado, seran conmemorados todos los años en esta misma fecha... hasta que todos se olviden de ellos."
+						  "! El enemigo les hace la envolvente y PUMMMM!!! "
+							+ (this.ataque < amarillo.getCantidad() ? this.ataque : amarillo.getCantidad())
+							+ " pikinims amarillos han muerto en combate.\n"
+						+ "! Su servicio nunca será olvidado, seran conmemorados todos los años en esta misma fecha... hasta que todos se olviden de ellos."
 					);
+					amarillo.disminuir(this.ataque);
+					seguirMatando = false;
 					break;
 			}
 		}
 
-		if (this.vida <= 0)
-			Levantar(cyan, magenta, amarillo);
+		// Completar zona una vez muerto el enemigo
+		if (this.vida <= 0) {
+			this.completar();
+			levantar(cyan, magenta, amarillo);
+		}
 
 		return this.vida <= 0;
 	}
 
-	public void Levantar(Cyan cyan, Magenta magenta, Amarillo amarillo) {
+	public void levantar(Cyan cyan, Magenta magenta, Amarillo amarillo) {
 		System.out.println(
 			"\n: El enemigo yace muerto en el suelo luego de una dura batalla.\n"
 			+ ": Con los pikimins restantes intentas levantar al enemigo caido.\n"
@@ -109,35 +127,32 @@ public class Enemigo extends Zona implements ILevantar {
 				case 1:
 					cyan.multiplicar(this.peso);
 					System.out.println(
-						"\n: Los pikinim cyan ahora son "
+						"\n! Los pikinim cyan ahora son "
 							+ cyan.getCantidad() + "!"
 					);
-					this.completada = true;
 					break;
 
 				case 2:
 					magenta.multiplicar(this.peso);
 					System.out.println(
-						"\n: Los pikinim magenta ahora son "
+						"\n! Los pikinim magenta ahora son "
 							+ magenta.getCantidad() + "!"
 					);
-					this.completada = true;
 					break;
 
 				case 3:
 					amarillo.multiplicar(this.peso);
 					System.out.println(
-						"\n: Los pikinim amarillos ahora son "
+						"\n! Los pikinim amarillos ahora son "
 							+ amarillo.getCantidad() + "!"
 					);
-					this.completada = true;
 					break;
 
 				default:
 					System.out.println(
 						  ": Acabo de decir que era 1, 2 y 3, no era tan complicado.\n"
-						+ ": Por error o por hacerte el chistosito perdiste una hora de vida.\n"
-						+ ": (Sinceramente me dio paja programar el intentar de nuevo)"
+						+ ": Ahora perdiste la posibilidad de hacer nuevos pikinims.\n"
+						+ ": Una pena."
 					);
 					break;
 			}
@@ -150,5 +165,14 @@ public class Enemigo extends Zona implements ILevantar {
 			  "\n: Ni con la fuerza de todos los pikimins juntos lo han podido levantar.\n"
 			+ ": El sacrificio tendra que esperar, solo esperemos que no se pudra."
 		);
+	}
+
+	public String getInfo() {
+		if (this.isCompletada()) {
+			return super.getInfo();
+		}
+
+		return "Enemigo (HP " + this.vida + " | ATK " + this.ataque
+					+ " | PESO " + this.peso + ")";
 	}
 }

@@ -8,7 +8,7 @@ public class Pieza extends Zona implements ILevantar {
 
 	public void interactuar(Cyan cyan, Magenta magenta, Amarillo amarillo) {
 		// Chequeo de si está completada
-		if (this.completada) {
+		if (this.isCompletada()) {
 			super.interactuar(cyan, magenta, amarillo);
 			return;
 		}
@@ -20,10 +20,10 @@ public class Pieza extends Zona implements ILevantar {
 				+ " kilopikinims, procedes a intentar levantarla con los pikinims que tienes.\n"
 		);
 
-		Levantar(cyan, magenta, amarillo);
+		levantar(cyan, magenta, amarillo);
 	}
 
-	public void Levantar(Cyan cyan, Magenta magenta, Amarillo amarillo) {
+	public void levantar(Cyan cyan, Magenta magenta, Amarillo amarillo) {
 		// Calculo de capacidad total
 		int capacidadTotal = 0;
 		capacidadTotal += cyan.getCapacidad() * cyan.getCantidad();
@@ -33,11 +33,11 @@ public class Pieza extends Zona implements ILevantar {
 		// Intentar levantar
 		if (capacidadTotal >= this.peso) {
 			Pieza.piezasEncontradas++;
-			this.completada = true;
+			this.completar();
 
 			System.out.println(
-				  ": Has recuperado la pieza!!!\n"
-				+ ": Esto nunca debio haber pasado..."
+				  "! Has recuperado la pieza!!!\n"
+				+ "! Esto nunca debio haber pasado..."
 			);
 
 			return;
@@ -45,9 +45,17 @@ public class Pieza extends Zona implements ILevantar {
 
 		// No se pudo levantar
 		System.out.println(
-			  ": Tus pequeños amigos no son suficientes para levantarla, parece que te falta "
+			  "! Tus pequeños amigos no son suficientes para levantarla, parece que te falta "
 					+ (this.peso - capacidadTotal) + " de capacidad para poder levantarla.\n"
-			+ ": Vuelve a intentarlo cuando tengas más pikinims."
+			+ "! Vuelve a intentarlo cuando tengas más pikinims."
 		);
+	}
+
+	public String getInfo() {
+		if (this.isCompletada()) {
+			return super.getInfo();
+		}
+
+		return "Pieza (PESO " + this.peso + ")";
 	}
 }

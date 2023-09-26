@@ -21,6 +21,5 @@ abstract class Pikinim {
 			this.cantidad = 0;
 	}
 
-	public void multiplicar(int cantidad) {
-	}
+	abstract public void multiplicar(int cantidad);
 }

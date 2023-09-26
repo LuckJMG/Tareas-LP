@@ -1,15 +1,29 @@
 public class Zona {
-	protected boolean completada;
+	private boolean completada;
+	private static int zonasCompletadas = 0;
 
 	public Zona() {
 		this.completada = false;
 	}
 
-	public boolean isCompletada() {
+	protected boolean isCompletada() {
 		return completada;
 	}
 
-	protected void interactuar(Cyan cyan, Magenta magenta, Amarillo amarillo) {
+	protected void completar() {
+		zonasCompletadas += 1;
+		this.completada = true;
+	}
+
+	public static int getZonasCompletadas() {
+		return zonasCompletadas;
+	}
+
+	public void interactuar(Cyan cyan, Magenta magenta, Amarillo amarillo) {
 		System.out.println(": Ya has hecho todo lo que puedes hacer aquí, no queda nada por hacer.");
+	}
+
+	public String getInfo() {
+		return "Zona Completada";
 	}
 }
