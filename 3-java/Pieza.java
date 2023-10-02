@@ -2,14 +2,31 @@ public class Pieza extends Zona implements ILevantar {
 	public static int piezasEncontradas;
 	private int peso;
 
+	/*
+	 * Nombre: Pieza
+	 *
+	 * Descripcion: Constructor de la clase Pieza, pone el peso de la pieza.
+	 *
+	 * Parametros:
+	 * - int peso, peso de la pieza
+	 */
 	public Pieza(int peso) {
 		this.peso = peso;
 	}
 
-	public void interactuar(Cyan cyan, Magenta magenta, Amarillo amarillo) {
+	/*
+	 * Nombre: interactuar
+	 *
+	 * Descripcion: Implementacion de interactuar, en este caso intenta levantar
+	 * la pieza.
+	 *
+	 * Parametros:
+	 * - Pikinim[] pikinims, array de pikinims con los que levantar la pieza
+	 */
+	public void interactuar(Pikinim[] pikinims) {
 		// Chequeo de si está completada
 		if (this.isCompletada()) {
-			super.interactuar(cyan, magenta, amarillo);
+			super.interactuar(pikinims);
 			return;
 		}
 
@@ -20,15 +37,25 @@ public class Pieza extends Zona implements ILevantar {
 				+ " kilopikinims, procedes a intentar levantarla con los pikinims que tienes.\n"
 		);
 
-		levantar(cyan, magenta, amarillo);
+		levantar(pikinims);
 	}
 
-	public void levantar(Cyan cyan, Magenta magenta, Amarillo amarillo) {
+	/*
+	 * Nombre: levantar
+	 *
+	 * Descripcion: Implementacion de la interfaz ILevantar, en este caso
+	 * intenta levantar la pieza con los pikinims que se le dan, completa la
+	 * zona si la logran levantar.
+	 *
+	 * Parametros:
+	 * - Pikinim[] pikinims, array de pikinims con los que levantar la pieza
+	 */
+	public void levantar(Pikinim[] pikinims) {
 		// Calculo de capacidad total
 		int capacidadTotal = 0;
-		capacidadTotal += cyan.getCapacidad() * cyan.getCantidad();
-		capacidadTotal += magenta.getCapacidad() * magenta.getCantidad();
-		capacidadTotal += amarillo.getCapacidad() * amarillo.getCantidad();
+		for (Pikinim color : pikinims) {
+			capacidadTotal += color.getCapacidad() * color.getCantidad();
+		}
 
 		// Intentar levantar
 		if (capacidadTotal >= this.peso) {
@@ -51,6 +78,16 @@ public class Pieza extends Zona implements ILevantar {
 		);
 	}
 
+	/*
+	 * Nombre: getInfo
+	 *
+	 * Descripcion: Implementacion de getInfo, en este caso muestra el peso de
+	 * la pieza cuando la zona no esta completada, cuando esta completada
+	 * muestra el caso base.
+	 *
+	 * Returns:
+	 * - String, informacion de la zona
+	 */
 	public String getInfo() {
 		if (this.isCompletada()) {
 			return super.getInfo();

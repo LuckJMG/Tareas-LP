@@ -2,7 +2,21 @@ import java.util.Scanner;
 
 public class Juego {
 	public static Scanner input;
+	private static int turno;
+	private static enum Direccion {
+		IZQUIERDA,
+		CENTRO,
+		DERECHA,
+	}
 
+	/*
+	 * Nombre: main
+	 *
+	 * Descripcion: Loop principal del programa.
+	 *
+	 * Parametros:
+	 * - String[] args, no usados
+	 */
 	public static void main(String[] args) {
 		// Inicialización del juego
 		Juego.input = new Scanner(System.in);
@@ -21,17 +35,16 @@ public class Juego {
 				new Muralla(150),
 		};
 
-		Cyan cyan = new Cyan();
-		Magenta magenta = new Magenta();
-		Amarillo amarillo = new Amarillo();
+		Pikinim[] pikinims = {
+			new Cyan(),
+			new Magenta(),
+			new Amarillo(),
+		};
 
-		int turno = 0;
+		Juego.turno = 0;
 		int posicion = 5;
-		int direccion = 0; // 1 izqueirda, 2 derecha
-		int noPuedePasar = 0;
-		// 0 se puede pasar
-		// 1 no se puede pasar por la izquierda
-		// 2 no se puede pasar por la derecha
+		Direccion direccion = Direccion.IZQUIERDA;
+		Direccion noPuedePasar = Direccion.CENTRO;
 
 		// Introducción
 		System.out.println(
@@ -55,109 +68,53 @@ public class Juego {
 
 		// Loop principal de juego
 		while (true) {
-			turno++;
-
 			// Interactuar con la zona actual
 			System.out.println("\n----------------------------------------------------------------------\n");
-			mapa[posicion].interactuar(cyan, magenta, amarillo);
+			mapa[posicion].interactuar(pikinims);
 			System.out.println("");
 
-			// Finales
-			/// Good Ending (Conseguiste escapar a tiempo)
-			if (Pieza.piezasEncontradas >= 3) {
-				System.out.println(
-					  ": Has encontrado todas las piezas!!!\n"
-					+ ": Quien diria que lograrias conseguirlas a tiempo.\n"
-					+ ": Ahora escapas del planeta, dejando abandonados a los pikinims que hicieron la mayor parte del trabajo. Que agradecido eres.\n"
-					+ ": Ahora por fín podrás ir a comprar la leche para tus hijos y volver para el desayuno.\n"
-					+ "\n\n=== YOU WIN ===\n\n"
-				);
-				break;
-			}
-
-			/// Bad Ending 1 (Se acabaron las 30 horas)
-			if (turno > 30) {
-				System.out.println(
-					  ": Mira lo que has hecho, Lomiar se ha quedado sin oxigeno y ha muerto por tu culpa.\n"
-					+ ": Ahora su cuerpo quedará en este planeta por siempre, y sus hijos nunca volveran a saber de el.\n"
-					+ ": Lo ultimo que recordaran fue que les dijo que iba a salir a comprar leche.\n"
-					+ "\n\n=== GAME OVER ===\n\n"
-				);
-				break;
-			}
-
-			/// Bad Ending 2 (No te quedan pikinims)
-			if (cyan.getCantidad() + magenta.getCantidad() + amarillo.getCantidad() == 0) {
-				System.out.println(
-					  ": Acabaste por matar hasta el último de tus pequeños compañeros.\n"
-					+ ": Ellos solo te querían ayudar a volver a tu hogar y tu que hiciste.\n"
-					+ ": Los tiraste contra un enemigo que sabías contra el que no podían ganar.\n"
-					+ ": Y solo por querer llegar una hora antes a tu casa.\n"
-					+ ": Reflexiona lo que hiciste en el rincón, porque no solo perdiste el juego.\n"
-					+ ": También perdiste valiosos compañeros que nunca valoraste.\n"
-					+ "\n\n=== GAME OVER ===\n\n"
-				);
+			// Chequear si se termino el juego
+			// NO VEAS LA FUNCION HASTA ENCONTRAR TODOS LOS FINALES (confia)
+			// Mas info al final del README.txt
+			if (checkEndings(mapa, pikinims)) {
 				break;
 			}
 
 			// Mostrar datos del turno actual
-			System.out.println(
-				  "| Horas de Oxigeno Restante: " + (31 - turno) + " horas\n"
-				+ "| Pikinims:\n"
-				+ "| - Cyan     (ATK 1 | CAP 1): " + cyan.getCantidad() + "\n"
-				+ "| - Magenta  (ATK 2 | CAP 1): " + magenta.getCantidad() + "\n"
-				+ "| - Amarillo (ATK 1 | CAP 3): " + amarillo.getCantidad() + "\n"
-				+ "| Piezas Encontradas: " + Pieza.piezasEncontradas + "/3\n"
-				+ "| Zonas Completadas: " + Zona.getZonasCompletadas() + "/11\n"
-				+ "| Zona Actual: " + mapa[posicion].getInfo() + "\n"
-			);
+			Zona zonaActual = mapa[posicion];
+			mostrarDatos(pikinims, zonaActual);
 
 			// Elección de en que gastar el turno
 			System.out.println("? Hacia donde quieres ir?");
 
-			// Chequeo de circunavegación
-			int posicionIzq = 0;
-			if (posicion == 0) {
-				posicionIzq = 10;
-			} else {
-				posicionIzq = posicion - 1;
-			}
-
-			int posicionDer = 0;
-			if (posicion == 10) {
-				posicionDer = 0;
-			} else {
-				posicionDer = posicion + 1;
-			}
+			// Mostrar movimientos disponibles
+			String zonaIzquierda = mapa[Juego.wrapIndex(posicion - 1, 0, mapa.length)].getInfo();
+			String zonaDerecha = mapa[Juego.wrapIndex(posicion + 1, 0, mapa.length)].getInfo();
 
 			// Chequeo de murallas
-			if (mapa[posicion].getClass().getName() == "Muralla" && !mapa[posicion].isCompletada()) {
-				if (direccion == 1) {
+			if (zonaActual.getClass().getName() == "Muralla" && !zonaActual.isCompletada()) {
+				if (direccion == Direccion.IZQUIERDA) {
+					// Bloqueo a la izquierda
 					System.out.println(
 						  "? La muralla bloquea tu paso a la izquierda.\n"
-						+ "? 2. Derecha ("
-							+ mapa[posicionDer].getInfo()
-							+ ")   3. Quedarse aquí"
+						+ "? 2. Derecha (" + zonaDerecha + ")   3. Quedarse aquí"
 					);
-					noPuedePasar = 1;
-				} else if (direccion == 2) {
+					noPuedePasar = Direccion.IZQUIERDA;
+				} else if (direccion == Direccion.DERECHA) {
+					// Bloqueo a la derecha
 					System.out.println(
 						  "? La muralla bloquea tu paso a la derecha.\n"
-						+ "? 1. Izquierda ("
-							+ mapa[posicionIzq].getInfo()
-							+ ")   3. Quedarse aquí"
+						+ "? 1. Izquierda (" + zonaIzquierda + ")   3. Quedarse aquí"
 					);
-					noPuedePasar = 2;
+					noPuedePasar = Direccion.DERECHA;
 				}
 			} else {
-				// Decisión default
+				// No hay bloqueos
 				System.out.println(
-					"? 1. Izquierda (" + mapa[posicionIzq].getInfo()
-						+ ")   2. Derecha ("
-						+ mapa[posicionDer].getInfo()
-						+ ")   3. Quedarse aquí"
+					"? 1. Izquierda (" + zonaIzquierda + ")   2. Derecha ("
+						+ zonaDerecha + ")   3. Quedarse aquí"
 				);
-				noPuedePasar = 0;
+				noPuedePasar = Direccion.CENTRO;
 			}
 
 			// Input usuario
@@ -165,39 +122,204 @@ public class Juego {
 			int eleccion = input.nextInt();
 
 			// Movimiento en el mapa y circunavegación
-			if (eleccion == 1 && !(noPuedePasar == 1)) {
-				if (posicion == 0) {
-					posicion = 10;
-				} else {
-					posicion--;
-				}
-
-				direccion = 1;
-			} else if (eleccion == 2 && !(noPuedePasar == 2)) {
-				if (posicion == 10) {
-					posicion = 0;
-				} else {
-					posicion++;
-				}
-
-				direccion = 2;
+			if (eleccion == 1 && noPuedePasar != Direccion.IZQUIERDA) {
+				posicion = wrapIndex(posicion - 1, 0, mapa.length);
+				direccion = Direccion.IZQUIERDA;
+			} else if (eleccion == 2 && noPuedePasar != Direccion.DERECHA) {
+				posicion = wrapIndex(posicion + 1, 0, mapa.length);
+				direccion = Direccion.DERECHA;
 			}
+
+			Juego.turno++;
 		}
 
 		// Pantalla final de puntaje
+		int cantidadTotal = 0;
+		for (Pikinim color : pikinims) {
+			cantidadTotal += color.getCantidad();
+		}
+
 		System.out.println(
 			  "======================================================================\n"
 			+ "| PUNTAJE OBTENIDO\n"
 			+ "======================================================================\n"
-			+ "| Horas de Oxigeno Restante: " + (31 - turno) + " horas\n"
-			+ "| Cantidad de pikinims: Cyan " + cyan.getCantidad()
-				+ " - Magenta " + magenta.getCantidad() + " - Amarillos "
-				+ amarillo.getCantidad() + "\n"
+			+ "| Horas de Oxigeno Restante: " + (30 - Juego.turno) + " horas\n"
 			+ "| Piezas Encontradas: " + Pieza.piezasEncontradas + "/3\n"
 			+ "| Zonas Completadas: " + Zona.getZonasCompletadas() + "/11\n"
-			+ "======================================================================"
+			+ "| Pikinims: " + cantidadTotal
 		);
 
+		for (Pikinim color : pikinims) {
+			System.out.println(
+				"| - " + color.getCantidad() + " " + color.getClass().getName()
+			);
+		}
+
+		System.out.println("======================================================================");
+
 		Juego.input.close();
+	}
+
+	/*
+	 * Nombre: wrapIndex
+	 *
+	 * Descripcion: Funcion para mantener los index que se le pasen dentro de
+	 * los limites prestablecidos, usada para poder circunavegar el mapa de
+	 * manera segura. Si se le pasa un index por debajo del limite inferior,
+	 * devuelve el mayor index valido, mientras que si se le pasa un index por
+	 * encima de limite superior, devuelve el limite inferior, si esta dentro de
+	 * los limites devuelve el mismo index.
+	 *
+	 * Parametros:
+	 * - int index, index a verificar
+	 * - int bottomLimit, limite inferior del rango
+	 * - int topLimit, limite superior del rango
+	 *
+	 * Returns:
+	 * - int, index circunavegado
+	 */
+	private static int wrapIndex(int index, int bottomLimit, int topLimit) {
+		if (index >= topLimit - 1) {
+			return bottomLimit;
+		}
+
+		if (index < bottomLimit) {
+			return topLimit - 1;
+		}
+
+		return index;
+	}
+
+	/*
+	 * Nombre: mostrarDatos
+	 *
+	 * Descripcion: Muestra los datoa del turno actual, esto incluye, cuantos
+	 * turnos quedan, la cantidad de pikinims con su respectiva informacion, la
+	 * cantidad de piezas encontradas, la cantidad de zonas completadas e info
+	 * de la zona actual.
+	 *
+	 * Parametros:
+	 * - Pikinim[] pikinims, array de pikinims del turno actual
+	 * - Zona zona, zona actual del turno
+	 */
+	private static void mostrarDatos(Pikinim[] pikinims, Zona zona) {
+		System.out.print(
+			  "| Horas de Oxigeno Restante: " + (30 - Juego.turno) + " horas\n"
+			+ "| Pikinims:\n"
+		);
+
+		for (Pikinim color : pikinims) {
+			System.out.println(
+				"| - (ATK " + color.getAtaque() + " | CAP "
+					+ color.getCapacidad() + ") " + color.getClass().getName()
+					+ ": " + color.getCantidad()
+			);
+		}
+
+		System.out.println(
+			  "| Piezas Encontradas: " + Pieza.piezasEncontradas + "/3\n"
+			+ "| Zonas Completadas: " + Zona.getZonasCompletadas() + "/11\n"
+			+ "| Zona Actual: " + zona.getInfo() + "\n"
+		);
+	}
+
+	/*
+	 * Nombre: checkEndings
+	 *
+	 * Descripcion: Funcion con el solo proposito de chequear si se ha llegado
+	 * a uno de los finales programados, chequea todas las condiciones para
+	 * terminar (buenas y malas), si alguna es verdadera, devuelve verdadero
+	 * que significa que termino el juego.
+	 *
+	 * Parametros:
+	 * - Zona[] mapa, mapa del juego
+	 * - Pikinim[] pikinims, array de pikinims del turno actual
+	 *
+	 * Returns:
+	 * - boolean, verdadero si finalizo el juego; falso si no
+	 */
+	private static boolean checkEndings(Zona[] mapa, Pikinim[] pikinims) {
+		// Finales
+		/// Perfect Ending (Completadas todas las zonas)
+		if (Zona.getZonasCompletadas() == mapa.length) {
+			System.out.println(
+				  ": Increible!!! Has completado todas las zonas del juego.\n"
+				+ ": No pense que podrias ganar, menos que consiguieras este final!\n"
+				+ ": Pero bueno, te mereces unas felicitaciones por completar al 100% el juego.\n"
+				+ ": FELICIDADES POR COMPLETARLO AL 100%!!!\n"
+				+ "\n\n=== YOU WIN - 100% ===\n\n"
+			);
+			return true;
+		}
+
+		if (Pieza.piezasEncontradas >= 3) {
+			/// Secret Ending (Speedrun)
+			if (Juego.turno <= 11) {
+				System.out.println(
+					  ": Wow, has encontrado todas las piezas en tiempo record!\n"
+					+ ": Tienes algo que hacer que estas tan apurado?\n"
+					+ ": No te metas al mundo del speedrun, no es bueno para la salud.\n"
+					+ ": Pero por mientras, tus merecidas felicitaciones.\n"
+					+ ": FELICIDADES POR COMPLETARLO EN TIEMPO RECORD!!!\n"
+					+ "\n\n=== YOU WIN - SPEEDRUN ===\n\n"
+					);
+					return true;
+			}
+
+			/// Good Ending (Conseguiste escapar a tiempo)
+			System.out.println(
+				  ": Has encontrado todas las piezas!!!\n"
+				+ ": Quien diria que lograrias conseguirlas a tiempo.\n"
+				+ ": Ahora escapas del planeta, dejando abandonados a los pikinims que hicieron la mayor parte del trabajo. Que agradecido eres.\n"
+				+ ": Ahora por fín podrás ir a comprar la leche para tus hijos y volver para el desayuno.\n"
+				+ "\n\n=== YOU WIN - ESCAPED ===\n\n"
+			);
+			return true;
+		}
+
+		/// Bad Ending 1 (Se acabaron las 30 horas)
+		if (Juego.turno >= 30) {
+			System.out.println(
+				  ": Mira lo que has hecho, Lomiar se ha quedado sin oxigeno y ha muerto por tu culpa.\n"
+				+ ": Ahora su cuerpo quedará en este planeta por siempre, y sus hijos nunca volveran a saber de el.\n"
+				+ ": Lo ultimo que recordaran fue que les dijo que iba a salir a comprar leche.\n"
+				+ "\n\n=== GAME OVER - DEAD ===\n\n"
+			);
+			return true;
+		}
+
+		int cantidadTotal = 0;
+		for (Pikinim color : pikinims) {
+			cantidadTotal += color.getCantidad();
+		}
+
+		if (cantidadTotal == 0) {
+			/// Bad Ending 2 (No te quedan pikinims)
+			System.out.println(
+				  ": Acabaste por matar hasta el último de tus pequeños compañeros.\n"
+				+ ": Ellos solo te querían ayudar a volver a tu hogar y tu que hiciste.\n"
+				+ ": Los tiraste contra un enemigo que sabías contra el que no podían ganar.\n"
+				+ ": Y solo por querer llegar una hora antes a tu casa.\n"
+				+ ": Reflexiona lo que hiciste en el rincón, porque no solo perdiste el juego.\n"
+				+ ": También perdiste valiosos compañeros que nunca valoraste.\n"
+				+ "\n\n=== GAME OVER - ALONE ===\n\n"
+			);
+			return true;
+		} else if (cantidadTotal >= 250) {
+			/// Secret Ending (Sobrepoblacion de pikinims)
+			System.out.println(
+				  ": Has hecho que los pikinims crezcan demasiado en número.\n"
+				+ ": Están empezando a agruparse y a tomar el liderazgo por ellos mismos.\n"
+				+ ": Se dieron cuenta de que ya no te necesitan, que ahora solo les perjudicas.\n"
+				+ ": Los pikinims te han matado, para sobre tí formar un nuevo gobierno, mejor que cualquier otro.\n"
+				+ ": Tu sacrificio no ha sido en vano, gracias a tí los pikinims han formado la Unión de Rojos amarilloS y Syan (URSS).\n"
+				+ ": Ahora rearmaran tu nave para expandir su influencia, a las buenas y a las malas, a traves del cosmos!\n"
+				+ ": VIVA LA URSS!!!\n"
+				+ "\n\n=== WE WIN - URSS ===\n\n"
+			);
+			return true;
+		}
+
+		return false;
 	}
 }

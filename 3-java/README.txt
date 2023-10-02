@@ -19,3 +19,7 @@ ROL: 202273504-k
 P.D.: Lee los comentarios del narrador!!! Hice lo mejor que pude
       para hacer bonita la intefaz y los comentarios chistosos,
 	  espero que te diviertas.
+
+P.P.D.: Hay 6 finales en total!!! Los 3 que dice la tarea y 3 extras que tienes
+        que encontrar! Una pista, hay por lo menos uno relacionado por cada
+		segmento de la pantalla final. Disfruta!!!

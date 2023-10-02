@@ -1,14 +1,33 @@
 public class Muralla extends Zona {
 	private int vida;
 
+	/*
+	 * Nombre: Muralla
+	 *
+	 * Descripcion: Constructor de la clase Muralla, pone el atributo vida.
+	 *
+	 * Parametros:
+	 * - int vida, vida de la muralla
+	 */
 	public Muralla(int vida) {
 		this.vida = vida;
 	}
 
-	public void interactuar(Cyan cyan, Magenta magenta, Amarillo amarillo) {
+	/*
+	 * Nombre: interactuar
+	 *
+	 * Descripcion: Implementacion de la funcion interactuar, intenta romper la
+	 * muralla con los pikinims que le da, en caso de conseguirlo se marca como
+	 * completada y subsecuentes llamadas de la funcion llamaran a la funcion
+	 * base.
+	 *
+	 * Parametros:
+	 * - Pikinim[] pikinims, pikinims con los que romper la muralla
+	 */
+	public void interactuar(Pikinim[] pikinims) {
 		// Chequeo de si está completada
 		if (this.isCompletada()) {
-			super.interactuar(cyan, magenta, amarillo);
+			super.interactuar(pikinims);
 			return;
 		}
 
@@ -18,7 +37,7 @@ public class Muralla extends Zona {
 		);
 
 		// Intentar romper la muralla
-		if (tryRomper(cyan, magenta, amarillo)) {
+		if (tryRomper(pikinims)) {
 			this.completar();
 
 			System.out.println(
@@ -38,11 +57,24 @@ public class Muralla extends Zona {
 		);
 	}
 
-	private boolean tryRomper(Cyan cyan, Magenta magenta, Amarillo amarillo) {
+	/*
+	 * Nombre: tryRomper
+	 *
+	 * Descripcion: Intenta romper la muralla, se le va restando vida en base al
+	 * total de ataque de los pikinims dados, si no lo consigue retorna falso,
+	 * en caso de conseguirlo retorna verdadero.
+	 *
+	 * Parametros:
+	 * - Pikinim[] pikinims, array de pikinims con los que se rompera la muralla
+	 *
+	 * Returns:
+	 * - boolean, verdadero si se logro destruir la muralla
+	 */
+	private boolean tryRomper(Pikinim[] pikinims) {
 		// Calculo de daño causado
-		this.vida -= cyan.getCantidad() * cyan.getAtaque();
-		this.vida -= magenta.getCantidad() * magenta.getAtaque();
-		this.vida -= amarillo.getCantidad() * amarillo.getAtaque();
+		for (Pikinim color : pikinims) {
+			this.vida -= color.getCantidad() * color.getAtaque();
+		}
 
 		if (vida < 0)
 			vida = 0;
@@ -50,6 +82,15 @@ public class Muralla extends Zona {
 		return vida <= 0;
 	}
 
+	/*
+	 * Nombre: getInfo
+	 *
+	 * Descripcion: Implementacion de getInfo, en este caso muestra la vida
+	 * restante de la muralla, una vez complatada la zona devuelve el caso base.
+	 *
+	 * Returns:
+	 * - String, informacion de la zona
+	 */
 	public String getInfo() {
 		if (this.isCompletada()) {
 			return super.getInfo();

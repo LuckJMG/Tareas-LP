@@ -1,14 +1,33 @@
 public class Pildora extends Zona {
 	private int cantidad;
 
+	/*
+	 * Nombre: Pildora
+	 *
+	 * Descripcion: Constructor de la clase Pildora, pone la cantidad que da la
+	 * pildora al consumirla.
+	 *
+	 * Parametros:
+	 * - int cantidad, cantidad de la pildora al consumirla
+	 */
 	public Pildora(int cantidad) {
 		this.cantidad = cantidad;
 	}
 
-	public void interactuar(Cyan cyan, Magenta magenta, Amarillo amarillo) {
+	/*
+	 * Nombre: interactuar
+	 *
+	 * Descripcion: Implementacion de interactuar, en este caso consume la
+	 * pildora y aumenta a los pikinims del color que el jugador elija, luego
+	 * marca como completada la zona.
+	 *
+	 * Parametros:
+	 * - Pikinim[] pikinims, array de pikinims del turno actual
+	 */
+	public void interactuar(Pikinim[] pikinims) {
 		// Chequeo de si está completada
 		if (this.isCompletada()) {
-			super.interactuar(cyan, magenta, amarillo);
+			super.interactuar(pikinims);
 			return;
 		}
 
@@ -16,7 +35,7 @@ public class Pildora extends Zona {
 			  ": Has encontrado una pildora de dudosa procedencia.\n"
 			+ ": Ves que dice en grande 'Cantidad: " + this.cantidad + "'.\n"
 			+ ": Como no piensas consumirla tu, prefieres darselas a tus pikinims.\n"
-			+ ": Al tirarles la pildora aparece un gran popup gigante gigante preguntado: \n"
+			+ ": Al tirarles la pildora aparece un gran popup gigante preguntado:\n"
 		);
 
 		// Elección de que color aumentar
@@ -26,45 +45,36 @@ public class Pildora extends Zona {
 			+ "? Elección: "
 		);
 
-		int eleccion = Juego.input.nextInt();
-		switch (eleccion) {
-			case 1:
-				cyan.multiplicar(this.cantidad);
-				System.out.println(
-					"\n! Los pikinim cyan ahora son " + cyan.getCantidad() + "!"
-				);
-				this.completar();
-				break;
+		int color = Juego.input.nextInt() - 1;
 
-			case 2:
-				magenta.multiplicar(this.cantidad);
-				System.out.println(
-					"\n! Los pikinim magenta ahora son " + magenta.getCantidad()
-						+ "!"
-				);
-				this.completar();
-				break;
-
-			case 3:
-				amarillo.multiplicar(this.cantidad);
-				System.out.println(
-					"\n! Los pikinim amarillos ahora son " + amarillo.getCantidad()
-						+ "!"
-				);
-				this.completar();
-				break;
-
-			default:
-				System.out.println(
-					  ": Creo haber dicho que era o 1 o 2 o 3.\n"
-					+ ": No pense que iba a ser tan dificil lidiar contigo.\n"
-					+ ": Ahora perdiste una hora de valioso oxigeno.\n"
-					+ ": Estas un paso más cerca de la muerte."
-				);
-				break;
+		if (color < 0 || color >= pikinims.length) {
+			System.out.println(
+				  ": Creo haber dicho que era o 1 o 2 o 3.\n"
+				+ ": No pense que iba a ser tan dificil lidiar contigo.\n"
+				+ ": Ahora perdiste una hora de valioso oxigeno.\n"
+				+ ": Estas un paso más cerca de la muerte."
+			);
+			return;
 		}
+
+		pikinims[color].multiplicar(this.cantidad);
+		System.out.println(
+			"\n! Los Pikinim " + pikinims[color].getClass().getName()
+				+ " ahora son " + pikinims[color].getCantidad() + "!"
+		);
+		this.completar();
 	}
 
+	/*
+	 * Nombre: getInfo
+	 *
+	 * Descripcion: Implementacion de getInfo, en este caso muestra la cantidad
+	 * asociada a la pildora antes de completar la zona, luego muestra el caso
+	 * base.
+	 *
+	 * Returns:
+	 * - String, informacion de la zona
+	 */
 	public String getInfo() {
 		if (this.isCompletada()) {
 			return super.getInfo();
