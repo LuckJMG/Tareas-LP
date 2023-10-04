@@ -49,7 +49,8 @@ public class Juego {
 		// Introducción
 		System.out.println(
 			  "\n\n=== MAL ATERRIZAJE ===\n\n"
-			+ "> Choqué con un asteroide en un viaje de rutina a comprar leche para mis hijos y ahora me encuentro solo en un planeta extraño.\n"
+			+ "> Choqué con un asteroide en un viaje de rutina a comprar leche para mis hijos\n"
+			+ "> y ahora me encuentro solo en un planeta extraño.\n"
 			+ "> Mi nave está destrozada y no sé a dónde fueron a parar sus piezas.\n"
 			+ "> Por suerte he encontrado unas criaturas curiosas, a lo mejor pueden ayudarme a volver a casa.\n"
 			+ "> (Convenientemente para el plot) Se ven emocionados de conocerme.\n"
@@ -270,7 +271,7 @@ public class Juego {
 			System.out.println(
 				  ": Has encontrado todas las piezas!!!\n"
 				+ ": Quien diria que lograrias conseguirlas a tiempo.\n"
-				+ ": Ahora escapas del planeta, dejando abandonados a los pikinims que hicieron la mayor parte del trabajo. Que agradecido eres.\n"
+				+ ": Dejas abandonados a los pikinims que hicieron la mayor parte del trabajo.\n"
 				+ ": Ahora por fín podrás ir a comprar la leche para tus hijos y volver para el desayuno.\n"
 				+ "\n\n=== YOU WIN - ESCAPED ===\n\n"
 			);
