@@ -6,9 +6,9 @@ public class Cyan extends Pikinim {
 	 * ataque, capacidad y cantidad de los Pikinims Cyan.
 	 */
 	public Cyan() {
-		this.ataque = 1;
-		this.capacidad = 1;
-		this.cantidad = 10;
+		this.setAtaque(1);
+		this.setCapacidad(1);
+		this.setCantidad(10);
 	}
 
 	/*
@@ -21,6 +21,6 @@ public class Cyan extends Pikinim {
 	 * - int cantidad, cantidad a multiplicar los pikinims
 	 */
 	public void multiplicar(int cantidad) {
-		this.cantidad += cantidad * 3;
+		this.setCantidad(this.getCantidad() + cantidad * 3);
 	}
 }

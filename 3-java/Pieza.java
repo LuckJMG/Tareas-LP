@@ -11,6 +11,30 @@ public class Pieza extends Zona implements ILevantar {
 	 * - int peso, peso de la pieza
 	 */
 	public Pieza(int peso) {
+		this.setPeso(peso);
+	}
+
+	/*
+	 * Nombre: getPeso
+	 *
+	 * Descripción: getter del atributo peso
+	 *
+	 * Returns:
+	 * - int, peso de la pieza
+	 */
+	public int getPeso() {
+		return this.peso;
+	}
+
+	/*
+	 * Nombre: setPeso
+	 *
+	 * Descripción: setter del atributo peso
+	 *
+	 * Parametros:
+	 * - int peso, nuevo peso de la pieza
+	 */
+	public void setPeso(int peso) {
 		this.peso = peso;
 	}
 
@@ -32,7 +56,7 @@ public class Pieza extends Zona implements ILevantar {
 
 		System.out.println(
 			  ": Encontraste una de las piezas perdidas!!!\n"
-			+ ": La pieza pesa " + this.peso
+			+ ": La pieza pesa " + this.getPeso()
 				+ " kilopikinims, podran levantarlo?\n"
 		);
 
@@ -73,7 +97,7 @@ public class Pieza extends Zona implements ILevantar {
 		// No se pudo levantar
 		System.out.println(
 			  "! No se pudo levantar, parece que te falta "
-					+ (this.peso - capacidadTotal) + " de capacidad.\n"
+					+ (this.getPeso() - capacidadTotal) + " de capacidad.\n"
 			+ "! Vuelve a intentarlo cuando tengas más pikinims."
 			+ "> Triste :c."
 		);
@@ -94,6 +118,6 @@ public class Pieza extends Zona implements ILevantar {
 			return super.getInfo();
 		}
 
-		return "Pieza (PESO " + this.peso + ")";
+		return "Pieza (PESO " + this.getPeso() + ")";
 	}
 }

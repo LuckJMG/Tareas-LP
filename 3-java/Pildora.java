@@ -11,6 +11,30 @@ public class Pildora extends Zona {
 	 * - int cantidad, cantidad de la pildora al consumirla
 	 */
 	public Pildora(int cantidad) {
+		this.setCantidad(cantidad);
+	}
+
+	/*
+	 * Nombre: getCantidad
+	 *
+	 * Descripción: getter del atributo cantidad
+	 *
+	 * Returns:
+	 * - int, valor del atributo cantidad
+	 */
+	public int getCantidad() {
+		return this.cantidad;
+	}
+
+	/* 
+	 * Nombre: setCantidad
+	 *
+	 * Descripción: setter del atributo cantidad
+	 *
+	 * Parametros:
+	 * - int cantidad, valor nuevo del atributo cantidad.
+	 */
+	public void setCantidad(int cantidad) {
 		this.cantidad = cantidad;
 	}
 
@@ -33,7 +57,7 @@ public class Pildora extends Zona {
 
 		System.out.println(
 			  ": Has encontrado una pildora de dudosa procedencia.\n"
-			+ ": Ves que dice en grande 'Cantidad: " + this.cantidad + "'.\n"
+			+ ": Ves que dice en grande 'Cantidad: " + this.getCantidad() + "'.\n"
 			+ "> Que hace una pildora gigante en mitad de un planeta abandonado?\n"
 		);
 
@@ -55,7 +79,7 @@ public class Pildora extends Zona {
 			return;
 		}
 
-		pikinims[color].multiplicar(this.cantidad);
+		pikinims[color].multiplicar(this.getCantidad());
 		System.out.println(
 			"\n! Los Pikinim " + pikinims[color].getClass().getName()
 				+ " ahora son " + pikinims[color].getCantidad() + "!"
@@ -78,6 +102,6 @@ public class Pildora extends Zona {
 			return super.getInfo();
 		}
 
-		return "Pildora (CANT " + this.cantidad + ")";
+		return "Pildora (CANT " + this.getCantidad() + ")";
 	}
 }

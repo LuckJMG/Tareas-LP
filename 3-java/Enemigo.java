@@ -17,8 +17,80 @@ public class Enemigo extends Zona implements ILevantar {
 	 * - int ataque, ataque del enemigo
 	 */
 	public Enemigo(int vida, int peso, int ataque) {
+		this.setVida(vida);
+		this.setPeso(peso);
+		this.setAtaque(ataque);
+	}
+
+	/*
+	 * Nombre: getVida
+	 *
+	 * Descripcion: getter del atributo vida
+	 *
+	 * Returns:
+	 * - int, valor de la vida
+	 */
+	public int getVida() {
+		return this.vida;
+	}
+
+	/*
+	 * Nombre: setVida
+	 *
+	 * Descripcion: setter del atributo vida
+	 *
+	 * Parametros:
+	 * - int vida, nuevo valor de la vida
+	 */
+	public void setVida(int vida) {
 		this.vida = vida;
+	}
+
+	/*
+	 * Nombre: getPeso
+	 *
+	 * Descripcion: getter del atributo peso
+	 *
+	 * Returns:
+	 * - int, valor del peso
+	 */
+	public int getPeso() {
+		return this.peso;
+	}
+
+	/*
+	 * Nombre: setPeso
+	 *
+	 * Descripcion: setter del atributo peso
+	 *
+	 * Parametros:
+	 * - int peso, nuevo valor del peso
+	 */
+	public void setPeso(int peso) {
 		this.peso = peso;
+	}
+
+	/*
+	 * Nombre: getAtaque
+	 *
+	 * Descripcion: getter del atributo ataque
+	 *
+	 * Returns:
+	 * - int, valor del ataque
+	 */
+	public int getAtaque() {
+		return this.ataque;
+	}
+
+	/*
+	 * Nombre: setAtaque
+	 *
+	 * Descripcion: setter del atributo ataque
+	 *
+	 * Parametros:
+	 * - int ataque, nuevo valor del ataque
+	 */
+	public void setAtaque(int ataque) {
 		this.ataque = ataque;
 	}
 
@@ -69,10 +141,10 @@ public class Enemigo extends Zona implements ILevantar {
 		for (Pikinim color : pikinims) {
 			ataqueTotal += color.getCantidad() * color.getAtaque();
 		}
-		this.vida -= ataqueTotal;
+		this.setVida(this.getVida() - ataqueTotal);
 
-		if (this.vida < 0)
-			this.vida = 0;
+		if (this.getVida() < 0)
+			this.setVida(0);
 
 		// Calculo de daño recibido
 		Random rand = new Random();
@@ -81,23 +153,23 @@ public class Enemigo extends Zona implements ILevantar {
 			if (pikinims[color].getCantidad() == 0) continue;
 
 			System.out.println(
-				  "! Dejaste al enemigo con " + this.vida + " de vida!!!\n"
+				  "! Dejaste al enemigo con " + this.getVida() + " de vida!!!\n"
 				+ "! Oh no! Han muerto "
-				  	+ (pikinims[color].getCantidad() <= this.ataque ? pikinims[color].getCantidad() : this.ataque)
+				  	+ (pikinims[color].getCantidad() <= this.getAtaque() ? pikinims[color].getCantidad() : this.getAtaque())
 					+ " Pikinims " + pikinims[color].getClass().getName() + "\n"
 				+ "> Una gran meta necesita de grandes sacrificios.\n"
 			);
-			pikinims[color].disminuir(this.ataque);
+			pikinims[color].disminuir(this.getAtaque());
 			break;
 		}
 
 		// Completar zona una vez muerto el enemigo
-		if (this.vida <= 0) {
+		if (this.getVida() <= 0) {
 			this.completar();
 			levantar(pikinims);
 		}
 
-		return this.vida <= 0;
+		return this.getVida() <= 0;
 	}
 
 	/*
@@ -118,7 +190,7 @@ public class Enemigo extends Zona implements ILevantar {
 			capacidadTotal += color.getCantidad() * color.getCapacidad();
 		}
 
-		if (capacidadTotal >= peso) {
+		if (capacidadTotal >= this.getPeso()) {
 			System.out.println(
 				  ": Con todas tus fuerza (los pikimins) logras levantar al enemigo.\n"
 				+ ": Y tal cual un azteca, te comeras a tu enemigo para hacer tuya su fuerza.\n"
@@ -140,7 +212,7 @@ public class Enemigo extends Zona implements ILevantar {
 				return;
 			}
 
-			pikinims[color].multiplicar(this.peso);
+			pikinims[color].multiplicar(this.getPeso());
 			System.out.println(
 				"\n! Los pikinim " + pikinims[color].getClass().getName()
 					+ " ahora son " + pikinims[color].getCantidad() + "!"
@@ -171,7 +243,7 @@ public class Enemigo extends Zona implements ILevantar {
 			return super.getInfo();
 		}
 
-		return "Enemigo (HP " + this.vida + " | ATK " + this.ataque
-					+ " | PESO " + this.peso + ")";
+		return "Enemigo (HP " + this.getVida() + " | ATK " + this.getAtaque()
+					+ " | PESO " + this.getPeso() + ")";
 	}
 }

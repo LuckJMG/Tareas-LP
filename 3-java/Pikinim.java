@@ -1,7 +1,7 @@
 abstract public class Pikinim {
-	protected int ataque;
-	protected int capacidad;
-	protected int cantidad;
+	private int ataque;
+	private int capacidad;
+	private int cantidad;
 
 	/*
 	 * Nombre: getAtaque
@@ -13,6 +13,18 @@ abstract public class Pikinim {
 	 */
 	public int getAtaque() {
 		return ataque;
+	}
+
+	/* 
+	 * Nombre: setAtaque
+	 *
+	 * Descripción: Setter del atributo ataque.
+	 *
+	 * Parametros:
+	 * - int ataque, valor a poner del atributo ataque.
+	 */
+	public void setAtaque(int ataque) {
+		this.ataque = ataque;
 	}
 
 	/*
@@ -27,6 +39,18 @@ abstract public class Pikinim {
 		return capacidad;
 	}
 
+	/* 
+	 * Nombre: setCapacidad
+	 *
+	 * Descripción: Setter del atributo capacidad.
+	 *
+	 * Parametros:
+	 * - int capacidad, valor a poner del atributo capacidad.
+	 */
+	public void setCapacidad(int capacidad) {
+		this.capacidad = capacidad;
+	}
+
 	/*
 	 * Nombre: getCantidad
 	 *
@@ -39,6 +63,18 @@ abstract public class Pikinim {
 		return cantidad;
 	}
 
+	/* 
+	 * Nombre: setCantidad
+	 *
+	 * Descripción: Setter del atributo cantidad.
+	 *
+	 * Parametros:
+	 * - int cantidad, valor a poner del atributo cantidad.
+	 */
+	public void setCantidad(int cantidad) {
+		this.cantidad = cantidad;
+	}
+
 	/*
 	 * Nombre: disminuir
 	 *
@@ -49,9 +85,10 @@ abstract public class Pikinim {
 	 * - int cantidad, cantidad a disminuir a los pikinims
 	 */
 	public void disminuir(int cantidad) {
+		this.setCantidad(this.getCantidad() - cantidad);
 		this.cantidad -= cantidad;
-		if (this.cantidad < 0)
-			this.cantidad = 0;
+		if (this.getCantidad() < 0)
+			this.setCantidad(0);
 	}
 
 	/*

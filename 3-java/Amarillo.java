@@ -6,9 +6,9 @@ public class Amarillo extends Pikinim {
 	 * ataque, capacidad y cantidad de los Pikinims Amarillos.
 	 */
 	public Amarillo() {
-		this.ataque = 1;
-		this.capacidad = 3;
-		this.cantidad = 10;
+		this.setAtaque(1);
+		this.setCapacidad(3);
+		this.setCantidad(10);
 	}
 
 	/*
@@ -21,6 +21,6 @@ public class Amarillo extends Pikinim {
 	 * - int cantidad, cantidad a multiplicar los pikinims
 	 */
 	public void multiplicar(int cantidad) {
-		this.cantidad += Math.ceil(cantidad * 1.5);
+		this.setCapacidad(this.getCantidad() + (int)Math.ceil(cantidad * 1.5));
 	}
 }

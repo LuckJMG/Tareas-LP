@@ -10,6 +10,30 @@ public class Muralla extends Zona {
 	 * - int vida, vida de la muralla
 	 */
 	public Muralla(int vida) {
+		this.setVida(vida);
+	}
+
+	/*
+	 * Nombre: getVida
+	 *
+	 * Descripción: getter del atributo vida.
+	 *
+	 * Returns:
+	 * - int, valor del atributo vida.
+	 */
+	public int getVida() {
+		return this.vida;
+	}
+
+	/*
+	 * Nombre: setVida
+	 *
+	 * Descripción: setter del atributo vida.
+	 *
+	 * Parametros:
+	 * - int vida, valor de la vida.
+	 */
+	public void setVida(int vida) {
 		this.vida = vida;
 	}
 
@@ -53,7 +77,7 @@ public class Muralla extends Zona {
 		// No se pudo destruir
 		System.out.println(
 			  "! Que pena tan grande, NO PUDISTE DESTRUIR tan fragil MURALLA.\n"
-			+ "! A la muralla le quedan " + this.vida + " puntos de vida.\n"
+			+ "! A la muralla le quedan " + this.getVida() + " puntos de vida.\n"
 			+ "> Claramente la muralla esta hecha de obsidiana."
 		);
 	}
@@ -74,7 +98,7 @@ public class Muralla extends Zona {
 	private boolean tryRomper(Pikinim[] pikinims) {
 		// Calculo de daño causado
 		for (Pikinim color : pikinims) {
-			this.vida -= color.getCantidad() * color.getAtaque();
+			this.setVida(this.getVida() - color.getCantidad() * color.getAtaque());
 		}
 
 		if (vida < 0)
@@ -97,6 +121,6 @@ public class Muralla extends Zona {
 			return super.getInfo();
 		}
 
-		return "Muralla (HP " + this.vida + ")";
+		return "Muralla (HP " + this.getVida() + ")";
 	}
 }
