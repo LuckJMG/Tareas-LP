@@ -33,7 +33,8 @@ public class Muralla extends Zona {
 
 		System.out.println(
 			  ": Te encuentras una muralla que cubre el camino de cal a canto.\n"
-			+ ": Haras el mejor intento de romperla lanzando a los pobres pikinims que te acompañan.\n"
+			+ ": Intentaras romperla lanzando a tus pobres pikinims contra ella.\n"
+			+ "> Id pequeñines! Trabajad!\n"
 		);
 
 		// Intentar romper la muralla
@@ -41,9 +42,9 @@ public class Muralla extends Zona {
 			this.completar();
 
 			System.out.println(
-				  "! A pesar del futil esfuerzo que haces para recuperar las piezas, has DESTRUIDO la muralla!!!\n"
+				  "! A pesar de tu futil esfuerzo, DESTRUISTE LA MURALLA!!!\n"
 				+ "! El camino que antes estaba cerrado se abré ante tí.\n"
-				+ "! Que te esperara al otro lado de la muralla?"
+				+ "> Con mi fuerza está muralla no ha sido nada para mí."
 			);
 
 			return;
@@ -51,9 +52,9 @@ public class Muralla extends Zona {
 
 		// No se pudo destruir
 		System.out.println(
-			  "! Ay que pena, NO pudiste DESTRUIR ni esta fragil muralla.\n"
+			  "! Que pena tan grande, NO PUDISTE DESTRUIR tan fragil MURALLA.\n"
 			+ "! A la muralla le quedan " + this.vida + " puntos de vida.\n"
-			+ "! Por si quieres hacer el futil intento de destruirla de nuevo."
+			+ "> Claramente la muralla esta hecha de obsidiana."
 		);
 	}
 

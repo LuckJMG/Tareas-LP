@@ -34,8 +34,7 @@ public class Pildora extends Zona {
 		System.out.println(
 			  ": Has encontrado una pildora de dudosa procedencia.\n"
 			+ ": Ves que dice en grande 'Cantidad: " + this.cantidad + "'.\n"
-			+ ": Como no piensas consumirla tu, prefieres darselas a tus pikinims.\n"
-			+ ": Al tirarles la pildora aparece un gran popup gigante preguntado:\n"
+			+ "> Que hace una pildora gigante en mitad de un planeta abandonado?\n"
 		);
 
 		// Elección de que color aumentar
@@ -49,8 +48,7 @@ public class Pildora extends Zona {
 
 		if (color < 0 || color >= pikinims.length) {
 			System.out.println(
-				  ": Creo haber dicho que era o 1 o 2 o 3.\n"
-				+ ": No pense que iba a ser tan dificil lidiar contigo.\n"
+				  "\n: Creo haber dicho que era o 1 o 2 o 3.\n"
 				+ ": Ahora perdiste una hora de valioso oxigeno.\n"
 				+ ": Estas un paso más cerca de la muerte."
 			);

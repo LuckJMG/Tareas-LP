@@ -31,10 +31,9 @@ public class Pieza extends Zona implements ILevantar {
 		}
 
 		System.out.println(
-			  ": Llegas al sector y te encuentras con una de las piezas de la nave.\n"
-			+ ": Tu solo no puedes levantarlo (falta gym), pero si ocupas la fuerza conjunta de tus pequeños amigos tal vez puedas recuperar la pieza.\n"
+			  ": Encontraste una de las piezas perdidas!!!\n"
 			+ ": La pieza pesa " + this.peso
-				+ " kilopikinims, procedes a intentar levantarla con los pikinims que tienes.\n"
+				+ " kilopikinims, podran levantarlo?\n"
 		);
 
 		levantar(pikinims);
@@ -64,7 +63,8 @@ public class Pieza extends Zona implements ILevantar {
 
 			System.out.println(
 				  "! Has recuperado la pieza!!!\n"
-				+ "! Esto nunca debio haber pasado..."
+				+ "! Algo que nunca debiste haber perdido en primer lugar.\n"
+				+ "> Un paso más cerca de volver a mi hogar."
 			);
 
 			return;
@@ -72,9 +72,10 @@ public class Pieza extends Zona implements ILevantar {
 
 		// No se pudo levantar
 		System.out.println(
-			  "! Tus pequeños amigos no son suficientes para levantarla, parece que te falta "
-					+ (this.peso - capacidadTotal) + " de capacidad para poder levantarla.\n"
+			  "! No se pudo levantar, parece que te falta "
+					+ (this.peso - capacidadTotal) + " de capacidad.\n"
 			+ "! Vuelve a intentarlo cuando tengas más pikinims."
+			+ "> Triste :c."
 		);
 	}
 

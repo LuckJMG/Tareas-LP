@@ -59,8 +59,9 @@ public class Enemigo extends Zona implements ILevantar {
 	 */
 	private boolean pelear(Pikinim[] pikinims) {
 		System.out.println(
-				": Te pones el reto de ir a pelear contra el enemigo que acecha en esta zona.\n"
-			+ ": (Y con ir a pelear, te refieres tirar a los pikinims que conociste hace menos de 30 horas a su segura muerte)\n"
+			  ": Te pones el reto de ir a pelear contra el enemigo de la zona.\n"
+			+ ": Y con ir a pelear te refieres a tirar a tus pikinims contra el.\n"
+			+ "> Atacad mis queridos pikinims! El cielo los espera!\n"
 		);
 
 		// Caculo daño causado
@@ -73,11 +74,6 @@ public class Enemigo extends Zona implements ILevantar {
 		if (this.vida < 0)
 			this.vida = 0;
 
-		System.out.println(
-				"! PIM! PAM! PUM!\n"
-			+ "! Dejaste al enemigo con " + this.vida + " de vida!!!\n"
-		);
-
 		// Calculo de daño recibido
 		Random rand = new Random();
 		while (true) {
@@ -85,10 +81,11 @@ public class Enemigo extends Zona implements ILevantar {
 			if (pikinims[color].getCantidad() == 0) continue;
 
 			System.out.println(
-				  "! Oh no! Han muerto "
+				  "! Dejaste al enemigo con " + this.vida + " de vida!!!\n"
+				+ "! Oh no! Han muerto "
 				  	+ (pikinims[color].getCantidad() <= this.ataque ? pikinims[color].getCantidad() : this.ataque)
 					+ " Pikinims " + pikinims[color].getClass().getName() + "\n"
-				+ "! Su servicio nunca será olvidado, seran conmemorados todos los años en esta misma fecha... hasta que todos se olviden de ellos."
+				+ "> Una gran meta necesita de grandes sacrificios.\n"
 			);
 			pikinims[color].disminuir(this.ataque);
 			break;
@@ -115,11 +112,6 @@ public class Enemigo extends Zona implements ILevantar {
 	 * - Pikinim[] pikinims, pikinims con los que levantar al enemigo
 	 */
 	public void levantar(Pikinim[] pikinims) {
-		System.out.println(
-			"\n: El enemigo yace muerto en el suelo luego de una dura batalla.\n"
-			+ ": Con los pikimins restantes intentas levantar al enemigo caido.\n"
-		);
-
 		// Calculo de capacidad total
 		int capacidadTotal = 0;
 		for (Pikinim color : pikinims) {
@@ -128,7 +120,7 @@ public class Enemigo extends Zona implements ILevantar {
 
 		if (capacidadTotal >= peso) {
 			System.out.println(
-				": Con todas tus fuerza (la de los pikimins) logras levantar al enemigo.\n"
+				  ": Con todas tus fuerza (los pikimins) logras levantar al enemigo.\n"
 				+ ": Y tal cual un azteca, te comeras a tu enemigo para hacer tuya su fuerza.\n"
 			);
 
@@ -144,7 +136,6 @@ public class Enemigo extends Zona implements ILevantar {
 				System.out.println(
 					  ": Acabo de decir que era 1, 2 y 3, no era tan complicado.\n"
 					+ ": Ahora perdiste la posibilidad de hacer nuevos pikinims.\n"
-					+ ": Una pena."
 				);
 				return;
 			}
@@ -160,8 +151,8 @@ public class Enemigo extends Zona implements ILevantar {
 
 		// Caso de no tener suficiente capacidad
 		System.out.println(
-			  "\n: Ni con la fuerza de todos los pikimins juntos lo han podido levantar.\n"
-			+ ": El sacrificio tendra que esperar, solo esperemos que no se pudra."
+			  "\n: Ni con la fuerza de todos los pikimins lo han podido levantar.\n"
+			+ ": El sacrificio se ha perdido."
 		);
 	}
 
