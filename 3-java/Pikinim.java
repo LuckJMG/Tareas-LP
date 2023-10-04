@@ -86,7 +86,6 @@ abstract public class Pikinim {
 	 */
 	public void disminuir(int cantidad) {
 		this.setCantidad(this.getCantidad() - cantidad);
-		this.cantidad -= cantidad;
 		if (this.getCantidad() < 0)
 			this.setCantidad(0);
 	}

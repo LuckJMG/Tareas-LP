@@ -180,7 +180,7 @@ public class Juego {
 	 * - int, index circunavegado
 	 */
 	private static int wrapIndex(int index, int bottomLimit, int topLimit) {
-		if (index >= topLimit - 1) {
+		if (index >= topLimit) {
 			return bottomLimit;
 		}
 

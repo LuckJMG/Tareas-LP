@@ -98,7 +98,7 @@ public class Pieza extends Zona implements ILevantar {
 		System.out.println(
 			  "! No se pudo levantar, parece que te falta "
 					+ (this.getPeso() - capacidadTotal) + " de capacidad.\n"
-			+ "! Vuelve a intentarlo cuando tengas más pikinims."
+			+ "! Vuelve a intentarlo cuando tengas más pikinims.\n"
 			+ "> Triste :c."
 		);
 	}

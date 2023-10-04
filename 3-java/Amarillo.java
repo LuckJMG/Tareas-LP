@@ -21,6 +21,6 @@ public class Amarillo extends Pikinim {
 	 * - int cantidad, cantidad a multiplicar los pikinims
 	 */
 	public void multiplicar(int cantidad) {
-		this.setCapacidad(this.getCantidad() + (int)Math.ceil(cantidad * 1.5));
+		this.setCantidad(this.getCantidad() + (int)Math.ceil(cantidad * 1.5));
 	}
 }
