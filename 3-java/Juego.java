@@ -281,7 +281,7 @@ public class Juego {
 		/// Bad Ending 1 (Se acabaron las 30 horas)
 		if (Juego.turno >= 30) {
 			System.out.println(
-				  ": Mira lo que has hecho, Lomiar se ha quedado sin oxigeno y ha muerto por tu culpa.\n"
+				  ": Lomiar se ha quedado sin oxigeno y ha muerto.\n"
 				+ ": Ahora su cuerpo quedará en este planeta por siempre, y sus hijos nunca volveran a saber de el.\n"
 				+ ": Lo ultimo que recordaran fue que les dijo que iba a salir a comprar leche.\n"
 				+ "\n\n=== GAME OVER - DEAD ===\n\n"
@@ -298,11 +298,9 @@ public class Juego {
 			/// Bad Ending 2 (No te quedan pikinims)
 			System.out.println(
 				  ": Acabaste por matar hasta el último de tus pequeños compañeros.\n"
-				+ ": Ellos solo te querían ayudar a volver a tu hogar y tu que hiciste.\n"
-				+ ": Los tiraste contra un enemigo que sabías contra el que no podían ganar.\n"
-				+ ": Y solo por querer llegar una hora antes a tu casa.\n"
-				+ ": Reflexiona lo que hiciste en el rincón, porque no solo perdiste el juego.\n"
-				+ ": También perdiste valiosos compañeros que nunca valoraste.\n"
+				+ ": Solo por querer llegar una hora antes a tu casa.\n"
+				+ ": Reflexiona lo que hiciste, porque no solo perdiste el juego.\n"
+				+ ": También perdiste valiosos compañeros.\n"
 				+ "\n\n=== GAME OVER - ALONE ===\n\n"
 			);
 			return true;
