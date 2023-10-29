@@ -75,8 +75,6 @@ public class Juego {
 			System.out.println("");
 
 			// Chequear si se termino el juego
-			// NO VEAS LA FUNCION HASTA ENCONTRAR TODOS LOS FINALES (confia)
-			// Mas info al final del README.txt
 			if (checkEndings(mapa, pikinims)) {
 				break;
 			}

@@ -75,6 +75,7 @@ void PasarTurno()
 
             TryExplotar(fila, columna);
         }
+        v
     }
 }
 
