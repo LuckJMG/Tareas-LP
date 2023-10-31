@@ -19,4 +19,6 @@
       (let ((cantidad (car (car stock))) (lista (car (cdr (car stock)))))
         (if (= (- cantidad (len lista)) 0)
             (armar_lista (cdr stock))
-            (cons (list (- cantidad (len lista)) (car lista)) (armar_lista (cdr stock)))))))
+            (if (< (- cantidad (len lista)) 0)
+                '()
+                (cons (list (- cantidad (len lista)) (car lista)) (armar_lista (cdr stock))))))))
